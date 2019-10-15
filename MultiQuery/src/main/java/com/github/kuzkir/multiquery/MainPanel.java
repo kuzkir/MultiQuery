@@ -5,6 +5,8 @@
  */
 package com.github.kuzkir.multiquery;
 
+import com.github.kuzkir.multiquery.source.SourceController;
+
 /**
  *
  * @author kuzkir
@@ -16,6 +18,7 @@ public class MainPanel extends javax.swing.JFrame {
      */
     public MainPanel() {
         initComponents();
+        qsSplit.setBottomComponent(new SourceController());
     }
 
     /**
