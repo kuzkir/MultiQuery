@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<BorderPane accessibleRole="NODE" cache="true" stylesheets="@../styles/common.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.kuzkir.multiquery.controller.ConnectionSourceController">
+   <top>
+      <HBox alignment="CENTER" spacing="10.0" stylesheets="@../styles/common.css" BorderPane.alignment="CENTER">
+         <children>
+            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Add%20Folder-16.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Создать новую группу" />
+               </tooltip>
+            </Button>
+            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Delete-16.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Удалить группу" />
+               </tooltip>
+            </Button>
+            <ComboBox maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="327.0" HBox.hgrow="ALWAYS" />
+         </children>
+         <padding>
+            <Insets bottom="2.0" left="5.0" right="30.0" top="2.0" />
+         </padding>
+      </HBox>
+   </top>
+   <right>
+      <VBox alignment="TOP_CENTER" maxWidth="30.0" minWidth="30.0" prefHeight="400.0" spacing="10.0" stylesheets="@../styles/common.css" BorderPane.alignment="CENTER">
+         <children>
+            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" stylesheets="@../styles/common.css">
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Plus-16.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Добавить источник" />
+               </tooltip>
+            </Button>
+            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+               <graphic>
+                  <ImageView accessibleRole="BUTTON" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" smooth="false">
+                     <image>
+                        <Image url="@../Minus-16.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Удалить источник" />
+               </tooltip>
+            </Button>
+            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+               <graphic>
+                  <ImageView accessibleRole="BUTTON" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" smooth="false">
+                     <image>
+                        <Image url="@../Edit-16.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Изменить источник" />
+               </tooltip>
+            </Button>
+         </children>
+         <padding>
+            <Insets left="2.0" right="2.0" top="5.0" />
+         </padding>
+      </VBox>
+   </right>
+   <center>
+      <TableView>
+        <columns>
+            <TableColumn editable="false" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" sortable="false" text="Активно" />
+          <TableColumn editable="false" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Статус" />
+          <TableColumn editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="265.0" text="Наименование" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </center>
+</BorderPane>

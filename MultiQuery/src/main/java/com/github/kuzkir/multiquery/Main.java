@@ -6,11 +6,9 @@
 package com.github.kuzkir.multiquery;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 /**
@@ -18,27 +16,25 @@ import javafx.stage.Stage;
  * @author kuzkir
  */
 public class Main extends Application {
-    
+
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
+        primaryStage.setTitle("MultiuQuery");
+        primaryStage.setMaximized(true);
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
         
-        Scene scene = new Scene(root, 300, 250);
-        
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/fxml/MainPanel.fxml"));
+        try {
+            Scene scene = new Scene(loader.load());
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (Exception e) {
+            Alert message = new Alert(Alert.AlertType.ERROR);
+            message.setTitle("Ошибка загрузки формы");
+            message.setHeaderText(e.getMessage());
+            message.show();
+        }
     }
 
     /**
@@ -47,5 +43,5 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }
