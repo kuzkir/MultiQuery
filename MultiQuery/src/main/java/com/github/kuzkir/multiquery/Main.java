@@ -5,6 +5,7 @@
  */
 package com.github.kuzkir.multiquery;
 
+import com.github.kuzkir.multiquery.maintenance.SourceMaintenance;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -22,6 +23,7 @@ public class Main extends Application {
         primaryStage.setTitle("MultiuQuery");
         primaryStage.setMaximized(true);
         
+        SourceMaintenance sm = new SourceMaintenance();
         
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/MainPanel.fxml"));
@@ -35,6 +37,8 @@ public class Main extends Application {
             message.setHeaderText(e.getMessage());
             message.show();
         }
+        
+        
     }
 
     /**

@@ -7,7 +7,9 @@ package com.github.kuzkir.multiquery.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 
 /**
  * FXML Controller class
@@ -16,8 +18,9 @@ import javafx.fxml.Initializable;
  */
 public class ConnectionSourceController implements Initializable {
 
+    @FXML 
+    private Button btnAddGroup;
     
-
     /**
      * Initializes the controller class.
      */
@@ -26,4 +29,8 @@ public class ConnectionSourceController implements Initializable {
         
     }    
     
+    @FXML
+    private void btnAddGroup_onAction() {
+        System.out.println("you're done");
+    }
 }

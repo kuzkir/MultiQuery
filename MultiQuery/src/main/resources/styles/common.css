@@ -2,16 +2,17 @@
  * Empty Stylesheet file.
  */
 
-.mainFxmlClass {
-
-}
+/*.root {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: powderblue;
+}*/
 
 .button {
     -fx-background-color: transparent;
 }
 
-.button:hover {
-    -fx-background-color: whitesmoke;
+.button:hover, .button:focused {
+    -fx-background-color: white;
 }
 
 .button:pressed {
