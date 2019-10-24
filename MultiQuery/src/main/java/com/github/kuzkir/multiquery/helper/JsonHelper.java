@@ -17,9 +17,8 @@ import java.io.IOException;
  *
  * @author kuzkir
  */
-public class JsonHelper implements IJsonHelper {
+public class JsonHelper {
 
-    @Override
     public <T> T get(File file, Class<T> classOfT) throws IOException {
 
         if (!file.exists()) {
@@ -27,20 +26,17 @@ public class JsonHelper implements IJsonHelper {
         }
 
         try (FileReader fr = new FileReader(file)) {
-
             Gson gson = new Gson();
             return gson.fromJson(fr, classOfT);
         }
     }
 
-    @Override
     public void set(File file, Object obj) throws IOException {
         if (!file.exists()) {
             file.createNewFile();
         }
 
         try (FileWriter fw = new FileWriter(file)) {
-
             GsonBuilder gb = new GsonBuilder();
             Gson gson = gb.setPrettyPrinting().create();
             fw.write(gson.toJson(obj));

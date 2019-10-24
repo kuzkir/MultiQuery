@@ -5,6 +5,7 @@
  */
 package com.github.kuzkir.multiquery.controller;
 
+import com.github.kuzkir.multiquery.maintenance.SourceMaintenance;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -18,19 +19,25 @@ import javafx.scene.control.Button;
  */
 public class ConnectionSourceController implements Initializable {
 
-    @FXML 
+    private final SourceMaintenance maintenance;
+
+    @FXML
     private Button btnAddGroup;
-    
+
+    public ConnectionSourceController() {
+        maintenance = new SourceMaintenance();
+    }
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-    }    
-    
+
+    }
+
     @FXML
     private void btnAddGroup_onAction() {
-        System.out.println("you're done");
+
     }
 }
