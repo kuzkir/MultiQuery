@@ -5,47 +5,27 @@
  */
 package com.github.kuzkir.multiquery.entity;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
  * @author kuzkir
  */
-public class Source implements Crudable<DatabaseGroup>{
-    
-    private List<DatabaseGroup> groups;
+public class Source {
 
-    @Override
-    public DatabaseGroup get() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private Set<DatabaseGroup> groups;
+
+    public Source() {
+        groups = new HashSet<>();
     }
     
-    @Override
-    public List<DatabaseGroup> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Set<DatabaseGroup> getGroups() {
+        return this.groups;
     }
 
-    @Override
-    public DatabaseGroup create(DatabaseGroup entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Source setGroups(Set<DatabaseGroup> groups) {
+        this.groups = groups;
+        return this;
     }
-
-    @Override
-    public DatabaseGroup update(DatabaseGroup entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void delete(DatabaseGroup entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int compareTo(DatabaseGroup o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
-    
-    
 }

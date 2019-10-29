@@ -5,10 +5,10 @@
  */
 package com.github.kuzkir.multiquery;
 
+import com.github.kuzkir.fxmessagebox.MessageBox;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 /**
@@ -16,11 +16,16 @@ import javafx.stage.Stage;
  * @author kuzkir
  */
 public class Main extends Application {
+    
+    
+    private static Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("MultiuQuery");
         primaryStage.setMaximized(true);
+        
+        this.primaryStage = primaryStage;
         
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/MainPanel.fxml"));
@@ -29,13 +34,14 @@ public class Main extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (Exception e) {
-            Alert message = new Alert(Alert.AlertType.ERROR);
-            message.setTitle("Ошибка загрузки формы");
-            message.setHeaderText(e.getMessage());
-            message.show();
+            MessageBox.showException(e);
         }
         
         
+    }
+    
+    public static Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     /**

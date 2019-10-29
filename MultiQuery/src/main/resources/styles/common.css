@@ -1,11 +1,7 @@
-/*
- * Empty Stylesheet file.
- */
-
-/*.root {
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: powderblue;
-}*/
+.root {
+    -fx-font-family: sans-serif;
+    /*-fx-font-size: 11.25px;*/
+}
 
 .button {
     -fx-background-color: transparent;

@@ -5,6 +5,7 @@
  */
 package com.github.kuzkir.multiquery.controller;
 
+import com.github.kuzkir.fxmessagebox.MessageBox;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -12,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -28,6 +28,8 @@ public class MainPanelController implements Initializable {
     private AnchorPane requestPane;
     @FXML
     private AnchorPane resultPane;
+    
+    
 
     /**
      * Initializes the controller class.
@@ -44,10 +46,7 @@ public class MainPanelController implements Initializable {
             sourcePane.setRightAnchor(cs, 0.0);
             sourcePane.setBottomAnchor(cs, 0.0);
         } catch (IOException e) {
-            Alert message = new Alert(Alert.AlertType.ERROR);
-            message.setTitle("Ошибка загрузки формы");
-            message.setHeaderText(e.getMessage());
-            message.show();
+            MessageBox.showException(e);
         }
 
     }

@@ -5,8 +5,11 @@
  */
 package com.github.kuzkir.multiquery.maintenance;
 
+import com.github.kuzkir.multiquery.entity.DatabaseGroup;
 import com.github.kuzkir.multiquery.entity.Source;
 import java.io.File;
+import java.io.IOException;
+import java.util.Set;
 
 /**
  *
@@ -16,8 +19,20 @@ public class SourceMaintenance extends Maintenance<Source> {
 
     public SourceMaintenance() {
         super(Source.class, new File("source.json"));
+
+    }
+
+    public Set<DatabaseGroup> getGroups() throws IOException {
+        return get().getGroups();
     }
     
-    
+    public void addGroup(DatabaseGroup group) throws IOException {
+        get().getGroups().add(group);
+        save();        
+    }
 
+    @Override
+    Source createNew() {
+        return new Source();
+    }
 }

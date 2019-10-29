@@ -35,7 +35,6 @@ public class JsonHelper {
         if (!file.exists()) {
             file.createNewFile();
         }
-
         try (FileWriter fw = new FileWriter(file)) {
             GsonBuilder gb = new GsonBuilder();
             Gson gson = gb.setPrettyPrinting().create();

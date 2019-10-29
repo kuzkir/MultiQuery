@@ -17,16 +17,21 @@ public abstract class Maintenance<T> {
     
     private final Class<T> classOfT;
     private final File entityStorage;
-    T entity;
+    private T entity;
     
     public Maintenance(Class<T> classOfT, File entityStorage) {
         this.classOfT = classOfT;
         this.entityStorage = entityStorage;
     }
     
+    boolean isNull() {
+        return this.entity == null;
+    }
+    
     T get() throws IOException {
-        if(entity == null) {
+        if(isNull()) {
             JsonHelper jh = new JsonHelper();
+            entity = createNew();
             entity = jh.get(entityStorage, classOfT);
         }
                 
@@ -35,8 +40,14 @@ public abstract class Maintenance<T> {
     
     void set(T entity) throws IOException {
         this.entity = entity;
-        
+        save();
+    }
+    
+    void save() throws IOException {
         JsonHelper jh = new JsonHelper();
         jh.set(entityStorage, this.entity);
     }
+    
+    abstract T createNew();
+        
 }

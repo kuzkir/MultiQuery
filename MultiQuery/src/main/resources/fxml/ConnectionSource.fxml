@@ -52,10 +52,10 @@
                   <Tooltip text="Изменить параметры группы" />
                </tooltip>
             </Button>
-            <ComboBox fx:id="cbConnectionGroup" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="290.0" HBox.hgrow="ALWAYS" />
+            <ComboBox fx:id="cbConnectionGroup" maxWidth="1.7976931348623157E308" prefWidth="290.0" HBox.hgrow="ALWAYS" />
          </children>
          <padding>
-            <Insets bottom="2.0" left="5.0" right="35.0" top="2.0" />
+            <Insets bottom="2.0" left="5.0" right="30.0" top="2.0" />
          </padding>
       </HBox>
    </top>
