@@ -25,10 +25,19 @@ public class SourceMaintenance extends Maintenance<Source> {
     public Set<DatabaseGroup> getGroups() throws IOException {
         return get().getGroups();
     }
-    
+
     public void addGroup(DatabaseGroup group) throws IOException {
         get().getGroups().add(group);
-        save();        
+        save();
+    }
+
+    public boolean removeGroup(String title) throws IOException {
+        if (get().getGroups().removeIf(a -> a.getTitle().equals(title))) {
+            save();
+            return true;
+        }
+        
+        return false;
     }
 
     @Override

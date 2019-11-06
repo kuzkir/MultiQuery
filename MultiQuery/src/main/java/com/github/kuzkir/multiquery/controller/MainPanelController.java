@@ -46,7 +46,7 @@ public class MainPanelController implements Initializable {
             sourcePane.setRightAnchor(cs, 0.0);
             sourcePane.setBottomAnchor(cs, 0.0);
         } catch (IOException e) {
-            MessageBox.showException(e);
+            MessageBox.showException("Загрузка главной формы", e);
         }
 
     }

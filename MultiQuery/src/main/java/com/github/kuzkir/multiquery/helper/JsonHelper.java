@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Driver;
 
 /**
  *
@@ -19,6 +20,16 @@ import java.io.IOException;
  */
 public class JsonHelper {
 
+    private final Gson gson;
+    
+    public JsonHelper() {
+        GsonBuilder gb = new GsonBuilder();
+        gb.setPrettyPrinting()
+            .registerTypeAdapter(Driver.class, new DriverSerializerDeserializer());
+        
+        gson = gb.create();
+    }
+    
     public <T> T get(File file, Class<T> classOfT) throws IOException {
 
         if (!file.exists()) {
@@ -26,7 +37,6 @@ public class JsonHelper {
         }
 
         try (FileReader fr = new FileReader(file)) {
-            Gson gson = new Gson();
             return gson.fromJson(fr, classOfT);
         }
     }
@@ -36,9 +46,8 @@ public class JsonHelper {
             file.createNewFile();
         }
         try (FileWriter fw = new FileWriter(file)) {
-            GsonBuilder gb = new GsonBuilder();
-            Gson gson = gb.setPrettyPrinting().create();
             fw.write(gson.toJson(obj));
         }
     }
+    
 }

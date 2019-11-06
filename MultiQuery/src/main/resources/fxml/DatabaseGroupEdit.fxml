@@ -32,6 +32,7 @@
             <TextField fx:id="tfTitle" stylesheets="@../styles/common.css" GridPane.columnIndex="2" />
             <ComboBox fx:id="cbDriver" maxWidth="1.7976931348623157E308" stylesheets="@../styles/common.css" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
             <ErrorProvider fx:id="epTitle" message="" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
+            <ErrorProvider fx:id="epDriver" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
          </children>
          <padding>
             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
