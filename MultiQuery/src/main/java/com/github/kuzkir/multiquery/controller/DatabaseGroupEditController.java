@@ -7,6 +7,7 @@ package com.github.kuzkir.multiquery.controller;
 
 import com.github.kuzkir.fxmessagebox.ErrorProvider;
 import com.github.kuzkir.multiquery.entity.DatabaseGroup;
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 import java.net.URL;
 import java.sql.Driver;
 import java.util.ResourceBundle;
@@ -35,6 +36,9 @@ public class DatabaseGroupEditController implements Initializable {
     private Stage stage;
     private boolean isSave;
     private DatabaseGroup group;
+    
+    private final String POSTGRESQL = "PostgreSQL Server";
+    private final String SQLSERVER = "Microsoft SQL Server";
 
     public boolean isSave() {
         return this.isSave;
@@ -47,14 +51,29 @@ public class DatabaseGroupEditController implements Initializable {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+    
+    public void setGroup(DatabaseGroup group) {
+        if(group == null) {
+            return;
+        }
+        
+        this.group = group;
+        
+        tfTitle.setText(group.getTitle());
+        if(group.getDriver() instanceof org.postgresql.Driver)
+            cbDriver.getSelectionModel().select(POSTGRESQL);
+        
+        if(group.getDriver() instanceof SQLServerDriver)
+            cbDriver.getSelectionModel().select(SQLSERVER);        
+    }
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        cbDriver.getItems().add("PostgreSQL Server");
-        cbDriver.getItems().add("Microsoft SQL Server");
+        cbDriver.getItems().add(POSTGRESQL);
+        cbDriver.getItems().add(SQLSERVER);
         cbDriver.getSelectionModel().select(0);
     }
 

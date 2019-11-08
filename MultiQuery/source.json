@@ -1,8 +1,36 @@
 {
   "groups": [
     {
-      "title": "444",
+      "title": "dtnVI",
       "driver": "postgresql",
+      "databases": [
+        {
+          "isActive": true,
+          "status": "DISCONECT",
+          "title": "TEST",
+          "connectionURL": "jdbc:sqlserver://win2003;databaseName\u003dTRANSNAVI_42",
+          "user": "trn-admin",
+          "password": "57835783"
+        }
+      ]
+    },
+    {
+      "title": "Мосгортранс",
+      "driver": "sqlserver",
+      "databases": [
+        {
+          "isActive": false,
+          "status": "DISCONECT",
+          "title": "TEST",
+          "connectionURL": "jdbc:sqlserver://win2003;databaseName\u003dTRANSNAVI_42",
+          "user": "trn-admin",
+          "password": "57835783"
+        }
+      ]
+    },
+    {
+      "title": "Самара",
+      "driver": "sqlserver",
       "databases": []
     }
   ]

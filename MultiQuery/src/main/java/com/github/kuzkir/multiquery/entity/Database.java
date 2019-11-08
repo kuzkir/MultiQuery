@@ -5,7 +5,6 @@
  */
 package com.github.kuzkir.multiquery.entity;
 
-import java.sql.Connection;
 import java.util.Objects;
 
 /**
@@ -14,17 +13,20 @@ import java.util.Objects;
  */
 public class Database {
 
-    private boolean isAvaliable;
+    private boolean isActive;
     private DatabaseStatus status;
     private String title;
-    private Connection connection;
+    private String host;
+    private String base;
+    private String user;
+    private String password;
     
     public Database() {
         
     }
 
-    public boolean isIsAvaliable() {
-        return this.isAvaliable;
+    public boolean getIsActive() {
+        return this.isActive;
     }
 
     public DatabaseStatus getStatus() {
@@ -35,12 +37,24 @@ public class Database {
         return this.title;
     }
 
-    public Connection getConnection() {
-        return this.connection;
+    public String getHost() {
+        return this.host;
+    }
+    
+    public String getBase() {
+        return this.base;
+    }
+    
+    public String getUser() {
+        return this.user;
+    }
+    
+    public String getPassword() {
+        return this.password;
     }
 
-    public Database setIsAvaliable(boolean isAvaliable) {
-        this.isAvaliable = isAvaliable;
+    public Database setIsActive(boolean isActive) {
+        this.isActive = isActive;
         return this;
     }
 
@@ -54,8 +68,23 @@ public class Database {
         return this;
     }
 
-    public Database setConnection(Connection connection) {
-        this.connection = connection;
+    public Database setHost(String host) {
+        this.host = host;
+        return this;
+    }
+    
+    public Database setBase(String base) {
+        this.base = base;
+        return this;
+    }
+    
+    public Database setUser(String user) {
+        this.user = user;
+        return this;
+    }
+    
+    public Database setPassword(String password) {
+        this.password = password;
         return this;
     }
 
