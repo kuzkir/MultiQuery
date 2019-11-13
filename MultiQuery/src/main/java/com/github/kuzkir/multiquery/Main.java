@@ -9,6 +9,7 @@ import com.github.kuzkir.fxmessagebox.MessageBox;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -25,6 +26,7 @@ public class Main extends Application {
         primaryStage.setTitle("MultiuQuery");
         primaryStage.setMaximized(true);
         
+        
         this.primaryStage = primaryStage;
         
         FXMLLoader loader = new FXMLLoader();
@@ -32,6 +34,10 @@ public class Main extends Application {
         try {
             Scene scene = new Scene(loader.load());
             primaryStage.setScene(scene);
+            primaryStage.getIcons().addAll(new Image(getClass().getResourceAsStream("/Omnichannel_16.png")),
+                new Image(getClass().getResourceAsStream("/Omnichannel_32.png")),
+                new Image(getClass().getResourceAsStream("/Omnichannel_48.png")),
+                new Image(getClass().getResourceAsStream("/Omnichannel_64.png")));
             primaryStage.show();
         } catch (Exception e) {
             MessageBox.showException("Запуск программы", e);

@@ -16,15 +16,15 @@
 
 <BorderPane stylesheets="@../styles/common.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.kuzkir.multiquery.controller.DatabaseGroupEditController">
    <center>
-      <GridPane alignment="CENTER" hgap="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="2.0">
+      <GridPane alignment="CENTER" hgap="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="7.0">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="110.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="25.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <Label text="Заголовок группы" />
@@ -42,7 +42,7 @@
    <bottom>
       <HBox alignment="CENTER_RIGHT" spacing="2.0">
          <children>
-            <Button defaultButton="true" mnemonicParsing="false" onAction="#btnSave_click" text="Сохранить">
+            <Button defaultButton="true" mnemonicParsing="false" onAction="#btnSave_onAction" text="Сохранить">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -51,7 +51,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button cancelButton="true" mnemonicParsing="false" onAction="#btnCancel_click" text="Отмена">
+            <Button cancelButton="true" mnemonicParsing="false" onAction="#btnCancel_onAction" text="Отмена">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>

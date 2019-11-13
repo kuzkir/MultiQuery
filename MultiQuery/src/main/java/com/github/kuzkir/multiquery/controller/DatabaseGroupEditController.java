@@ -7,6 +7,7 @@ package com.github.kuzkir.multiquery.controller;
 
 import com.github.kuzkir.fxmessagebox.ErrorProvider;
 import com.github.kuzkir.multiquery.entity.DatabaseGroup;
+import com.github.kuzkir.multiquery.helper.StringHelper;
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 import java.net.URL;
 import java.sql.Driver;
@@ -78,12 +79,12 @@ public class DatabaseGroupEditController implements Initializable {
     }
 
     @FXML
-    public void btnCancel_click() {
+    public void btnCancel_onAction() {
         stage.close();
     }
 
     @FXML
-    public void btnSave_click() {
+    public void btnSave_onAction() {
         if (verify()) {
             try {
                 Driver driver = null;
@@ -109,10 +110,10 @@ public class DatabaseGroupEditController implements Initializable {
     }
 
     private boolean verify() {
-        int LENGTH = 15;
+        int LENGTH = 20;
 
-        boolean result = epTitle.verify(() -> (!tfTitle.getText().trim().isEmpty()), "Заголовок должен быть указан");
-        result = result && epTitle.verify(() -> tfTitle.getText().length() < LENGTH, String.format("Длина заголовка не должна превышать %d символов", LENGTH));
+        boolean result = epTitle.verify(() -> (!tfTitle.getText().trim().isEmpty()), "Заголовок не может быть пустым");
+        result = result && epTitle.verify(() -> tfTitle.getText().length() < LENGTH, String.format("Длина заголовка не должна превышать %d символ%s", LENGTH, StringHelper.endAfterInt(LENGTH)));
         return result;
     }
 

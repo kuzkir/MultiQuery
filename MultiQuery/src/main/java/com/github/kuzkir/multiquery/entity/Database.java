@@ -6,6 +6,8 @@
 package com.github.kuzkir.multiquery.entity;
 
 import java.util.Objects;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -17,12 +19,13 @@ public class Database {
     private DatabaseStatus status;
     private String title;
     private String host;
+    private int port;
     private String base;
     private String user;
     private String password;
-    
+
     public Database() {
-        
+
     }
 
     public boolean getIsActive() {
@@ -40,17 +43,44 @@ public class Database {
     public String getHost() {
         return this.host;
     }
-    
+
+    public int getPort() {
+        return this.port;
+    }
+
     public String getBase() {
         return this.base;
     }
-    
+
     public String getUser() {
         return this.user;
     }
-    
+
     public String getPassword() {
         return this.password;
+    }
+
+    public ImageView getImage() {
+        if(this.status == null)
+            return new ImageView(new Image(getClass().getResourceAsStream("/Disconnected-16.png")));
+        
+        switch(this.status) {
+            case CONNECTED:
+                return new ImageView(new Image(getClass().getResourceAsStream("/Connected-16.png")));
+                
+            case LOAD:
+                return new ImageView(new Image(getClass().getResourceAsStream("/Load.gif")));
+                
+            case COMPLETE:
+                return new ImageView(new Image(getClass().getResourceAsStream("/Ok-16.png")));
+                
+            case ERROR:
+                return new ImageView(new Image(getClass().getResourceAsStream("/High Importance-16.png")));
+                
+            case DISCONNECT:
+            default:
+                return new ImageView(new Image(getClass().getResourceAsStream("/Disconnected-16.png")));
+        }
     }
 
     public Database setIsActive(boolean isActive) {
@@ -72,17 +102,22 @@ public class Database {
         this.host = host;
         return this;
     }
-    
+
+    public Database setPort(int port) {
+        this.port = port;
+        return this;
+    }
+
     public Database setBase(String base) {
         this.base = base;
         return this;
     }
-    
+
     public Database setUser(String user) {
         this.user = user;
         return this;
     }
-    
+
     public Database setPassword(String password) {
         this.password = password;
         return this;

@@ -12,46 +12,50 @@ import java.io.File;
  *
  * @author kuzkir
  */
-public abstract class JSONMaintenance<T> implements Maintenance<T>{
-    
+public abstract class JSONMaintenance<T> implements Maintenance<T> {
+
     private final Class<T> classOfT;
     private final File entityStorage;
     private T entity;
-    
+
     public JSONMaintenance(Class<T> classOfT, File entityStorage) {
         this.classOfT = classOfT;
         this.entityStorage = entityStorage;
     }
-    
+
     @Override
     public boolean isNull() {
         return this.entity == null;
     }
-    
+
     @Override
     public T get() throws Exception {
-        if(isNull()) {
-            JsonHelper jh = new JsonHelper();
-            entity = createNew();
-            entity = jh.get(entityStorage, classOfT);
+        synchronized (this.entity) {
+            if (isNull()) {
+                JsonHelper jh = new JsonHelper();
+                entity = createNew();
+                entity = jh.get(entityStorage, classOfT);
+            }
+
+            return entity;
         }
-                
-        return entity;
     }
-    
+
     @Override
     public T set(T entity) throws Exception {
-        this.entity = entity;
-        save();
-        return this.entity;
+        synchronized (this.entity) {
+            this.entity = entity;
+            save();
+            return this.entity;
+        }
     }
-    
+
     @Override
     public void save() throws Exception {
         JsonHelper jh = new JsonHelper();
         jh.set(entityStorage, this.entity);
     }
-    
+
     public abstract T createNew();
-        
+
 }

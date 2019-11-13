@@ -1,37 +1,50 @@
 {
   "groups": [
     {
-      "title": "dtnVI",
-      "driver": "postgresql",
+      "title": "Омск",
+      "driver": "sqlserver",
       "databases": [
         {
           "isActive": true,
-          "status": "DISCONECT",
-          "title": "TEST",
-          "connectionURL": "jdbc:sqlserver://win2003;databaseName\u003dTRANSNAVI_42",
+          "status": "DISCONNECT",
+          "title": "ООАТ",
+          "host": "94.137.47.238",
+          "port": 4850,
+          "base": "TRN42",
           "user": "trn-admin",
-          "password": "57835783"
-        }
-      ]
-    },
-    {
-      "title": "Мосгортранс",
-      "driver": "sqlserver",
-      "databases": [
+          "password": "2578325783"
+        },
         {
-          "isActive": false,
-          "status": "DISCONECT",
-          "title": "TEST",
-          "connectionURL": "jdbc:sqlserver://win2003;databaseName\u003dTRANSNAVI_42",
+          "isActive": true,
+          "status": "DISCONNECT",
+          "title": "2-4",
+          "host": "94.137.47.238",
+          "port": 4851,
+          "base": "TRANSNAVI42",
           "user": "trn-admin",
-          "password": "57835783"
+          "password": "2578325783"
+        },
+        {
+          "isActive": true,
+          "status": "DISCONNECT",
+          "title": "ГЭТ + Ком",
+          "host": "94.137.47.238",
+          "port": 4853,
+          "base": "TRN",
+          "user": "trn-admin",
+          "password": "2578325783"
+        },
+        {
+          "isActive": true,
+          "status": "DISCONNECT",
+          "title": "7-8",
+          "host": "94.137.47.238",
+          "port": 4856,
+          "base": "TRANSNAVI42",
+          "user": "trn-admin",
+          "password": "2578325783"
         }
       ]
-    },
-    {
-      "title": "Самара",
-      "driver": "sqlserver",
-      "databases": []
     }
   ]
 }

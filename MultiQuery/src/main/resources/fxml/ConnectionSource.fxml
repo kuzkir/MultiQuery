@@ -74,7 +74,7 @@
                   <Tooltip text="Добавить источник" />
                </tooltip>
             </Button>
-            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#btnDeleteConnection_onAction" prefHeight="25.0" prefWidth="25.0">
                <graphic>
                   <ImageView accessibleRole="BUTTON" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" smooth="false">
                      <image>
@@ -86,7 +86,7 @@
                   <Tooltip text="Удалить источник" />
                </tooltip>
             </Button>
-            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#btnEditConnection_onAction" prefHeight="25.0" prefWidth="25.0">
                <graphic>
                   <ImageView accessibleRole="BUTTON" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" smooth="false">
                      <image>
@@ -107,9 +107,9 @@
    <center>
       <TableView fx:id="tbDatabase" editable="true" BorderPane.alignment="CENTER">
         <columns>
-            <TableColumn fx:id="tcActive" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" sortable="false" text="Активно" />
-          <TableColumn editable="false" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Статус" />
-          <TableColumn editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="150.0" text="Наименование" />
+            <TableColumn fx:id="tcActive" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" sortable="false" style="-fx-alignment: CENTER;" text="Активно" />
+          <TableColumn fx:id="tcStatus" editable="false" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" sortable="false" style="-fx-alignment: CENTER;" text="Статус" />
+          <TableColumn fx:id="tcTitle" editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="150.0" text="Наименование" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
