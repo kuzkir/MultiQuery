@@ -5,8 +5,8 @@
  */
 package com.github.kuzkir.multiquery.entity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -14,17 +14,17 @@ import java.util.Set;
  */
 public class Source {
 
-    private Set<DatabaseGroup> groups;
+    private List<DatabaseGroup> groups;
 
     public Source() {
-        groups = new HashSet<>();
+        groups = new ArrayList<>();
     }
     
-    public Set<DatabaseGroup> getGroups() {
+    public List<DatabaseGroup> getGroups() {
         return this.groups;
     }
 
-    public Source setGroups(Set<DatabaseGroup> groups) {
+    public Source setGroups(List<DatabaseGroup> groups) {
         this.groups = groups;
         return this;
     }

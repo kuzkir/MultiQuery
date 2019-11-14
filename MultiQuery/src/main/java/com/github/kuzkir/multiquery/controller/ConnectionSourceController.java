@@ -10,9 +10,14 @@ import com.github.kuzkir.multiquery.Main;
 import com.github.kuzkir.multiquery.entity.Database;
 import com.github.kuzkir.multiquery.entity.DatabaseGroup;
 import com.github.kuzkir.multiquery.maintenance.ConnectionSource;
+import com.github.kuzkir.multiquery.engine.Connectable;
+import com.github.kuzkir.multiquery.entity.DatabaseStatus;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Driver;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -34,7 +39,7 @@ import javafx.stage.Stage;
  *
  * @author kuzkir
  */
-public class ConnectionSourceController implements Initializable {
+public class ConnectionSourceController implements Initializable,Connectable {
 
     private final ConnectionSource source;
 
@@ -277,5 +282,29 @@ public class ConnectionSourceController implements Initializable {
         } catch (Exception e) {
             MessageBox.showException("Обновление списка групп", e);
         }
+    }
+
+    @Override
+    public List<Database> getDatabases() throws Exception {
+            DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
+            return group.getDatabases().stream()
+                .filter(a -> a.getIsActive())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Driver getDriver() throws Exception {
+        DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
+            return group.getDriver();
+    }
+
+    @Override
+    public void setStatus(String base, DatabaseStatus status) throws Exception {
+        DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
+        group.getDatabases().stream()
+            .filter(a -> a.getTitle().equals(base))
+            .findAny()
+            .ifPresent(a -> a.setStatus(status));
+        updateBase();
     }
 }

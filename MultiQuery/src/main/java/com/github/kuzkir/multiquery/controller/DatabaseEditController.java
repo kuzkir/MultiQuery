@@ -25,7 +25,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 
 /**
  * FXML Controller class
@@ -33,6 +35,8 @@ import javafx.stage.Stage;
  * @author kuzkir
  */
 public class DatabaseEditController implements Initializable {
+
+    private int defaultPort;
 
     private Stage stage;
     private boolean isSave;
@@ -71,11 +75,13 @@ public class DatabaseEditController implements Initializable {
     public void setBase(DatabaseGroup group, Database base) {
         this.group = group;
         if (group.getDriver() instanceof org.postgresql.Driver) {
-            sPort.getValueFactory().setValue(5432);
+            defaultPort = 5432;
         }
         if (group.getDriver() instanceof SQLServerDriver) {
-            sPort.getValueFactory().setValue(1433);
+            defaultPort = 1433;
         }
+
+        sPort.getValueFactory().setValue(defaultPort);
         if (base == null) {
             return;
         }
@@ -95,9 +101,11 @@ public class DatabaseEditController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         sPort.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 65535));
+        sPort.getEditor().setTextFormatter(new TextFormatter(new IntegerStringConverter()));
         sPort.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue)
+            if (!newValue) {
                 sPort.increment(0);
+            }
         });
     }
 
@@ -113,17 +121,24 @@ public class DatabaseEditController implements Initializable {
 
     @FXML
     public void btnSave_onAction() {
+        String txt = tfTitle.getText().trim();
+        String host = tfHost.getText();
+        int port = sPort.getValue();
+        String user = tfUser.getText();
+        String pswd = pfPassword.getText();
+        String base = cbBase.getValue();
+
         if (verify()) {
             try {
                 this.base = new Database()
                     .setIsActive(true)
-                    .setTitle(tfTitle.getText().trim())
+                    .setTitle(txt)
                     .setStatus(DatabaseStatus.DISCONNECT)
-                    .setHost(tfHost.getText())
-                    .setPort(sPort.getValueFactory().getValue())
-                    .setBase(cbBase.getValue())
-                    .setUser(tfUser.getText())
-                    .setPassword(pfPassword.getText());
+                    .setHost(host)
+                    .setPort(port)
+                    .setBase(base)
+                    .setUser(user)
+                    .setPassword(pswd);
                 isSave = true;
                 stage.close();
             } catch (Exception e) {
@@ -136,17 +151,26 @@ public class DatabaseEditController implements Initializable {
     private boolean verify() {
         int LENGTH = 20;
 
-        boolean result = epTitle.verify(() -> (!tfTitle.getText().trim().isEmpty()), "Заголовок не может быть пустым");
-        result = result && epTitle.verify(() -> tfTitle.getText().length() < LENGTH, String.format("Длина заголовка не должна превышать %d символ%s", LENGTH, StringHelper.endAfterInt(LENGTH)));
+        String txt = tfTitle.getText().trim();
+
+        boolean result = epTitle.verify(() -> (!txt.isEmpty()), "Заголовок не может быть пустым");
+        result = result && epTitle.verify(() -> txt.length() < LENGTH, String.format("Длина заголовка не должна превышать %d символ%s", LENGTH, StringHelper.endAfterInt(LENGTH)));
+        result = epTitle.verify(() -> !group.getDatabases().stream().anyMatch(b -> b.getTitle().equals(txt)), "Подключение с таким навименованием уже имеется") && result;
+
         result = epBase.verify(() -> tryConnect(), "Не удается подключиться к указанной базе данных") && result;
         return result;
     }
 
     private void getCatalogs() {
+        String host = tfHost.getText();
+        int port = sPort.getValue();
+        String user = tfUser.getText();
+        String pswd = pfPassword.getText();
+
         cbBase.getItems().clear();
         if (group.getDriver() instanceof org.postgresql.Driver) {
-            String url = ConnectionHelper.getPgConnectionURL(tfHost.getText(), sPort.getValueFactory().getValue());
-            try (Connection con = DriverManager.getConnection(url, tfUser.getText(), pfPassword.getText())) {
+            String url = ConnectionHelper.getPgConnectionURL(host, port);
+            try (Connection con = DriverManager.getConnection(url, user, pswd)) {
                 ResultSet rs = con.createStatement().executeQuery("SELECT datname FROM pg_database WHERE NOT datistemplate AND datallowconn ORDER BY datname");
                 while (rs.next()) {
                     cbBase.getItems().add(rs.getString(1));
@@ -158,8 +182,8 @@ public class DatabaseEditController implements Initializable {
             return;
         }
         if (group.getDriver() instanceof SQLServerDriver) {
-            String url = ConnectionHelper.getMsConnectionURL(tfHost.getText(), sPort.getValueFactory().getValue());
-            try (Connection con = DriverManager.getConnection(url, tfUser.getText(), pfPassword.getText())) {
+            String url = ConnectionHelper.getMsConnectionURL(host, port);
+            try (Connection con = DriverManager.getConnection(url, user, pswd)) {
                 ResultSet rs = con.getMetaData().getCatalogs();
                 while (rs.next()) {
                     cbBase.getItems().add(rs.getString(1));
@@ -173,8 +197,14 @@ public class DatabaseEditController implements Initializable {
     }
 
     private boolean tryConnect() {
-        String url = ConnectionHelper.getMsConnectionURL(tfHost.getText(), sPort.getValueFactory().getValue(), cbBase.getValue());
-        try (Connection con = DriverManager.getConnection(url, tfUser.getText(), pfPassword.getText())) {
+        String host = tfHost.getText();
+        int port = sPort.getValue();
+        String user = tfUser.getText();
+        String pswd = pfPassword.getText();
+        String base = cbBase.getValue();
+
+        String url = ConnectionHelper.getMsConnectionURL(host, port, base);
+        try (Connection con = DriverManager.getConnection(url, user, pswd)) {
         } catch (Exception e) {
             return false;
         }

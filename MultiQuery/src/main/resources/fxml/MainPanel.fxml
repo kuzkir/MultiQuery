@@ -7,7 +7,7 @@
   <items>
       <SplitPane cache="true" dividerPositions="0.0">
          <items>
-          <AnchorPane fx:id="requestPane" minHeight="200.0" minWidth="400.0" />
+          <AnchorPane fx:id="queryPane" minHeight="200.0" minWidth="400.0" />
             <AnchorPane fx:id="sourcePane" minHeight="200.0" minWidth="300.0" SplitPane.resizableWithParent="false" />
          </items>
       </SplitPane>

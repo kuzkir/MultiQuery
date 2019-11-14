@@ -85,6 +85,8 @@ public class DatabaseGroupEditController implements Initializable {
 
     @FXML
     public void btnSave_onAction() {
+        String txt = tfTitle.getText().trim();
+        
         if (verify()) {
             try {
                 Driver driver = null;
@@ -98,7 +100,7 @@ public class DatabaseGroupEditController implements Initializable {
                 }
 
                 this.group = new DatabaseGroup()
-                    .setTitle(tfTitle.getText().trim())
+                    .setTitle(txt)
                     .setDriver(driver);
                 isSave = true;
                 stage.close();
@@ -111,9 +113,11 @@ public class DatabaseGroupEditController implements Initializable {
 
     private boolean verify() {
         int LENGTH = 20;
+        
+        String txt = tfTitle.getText().trim();
 
-        boolean result = epTitle.verify(() -> (!tfTitle.getText().trim().isEmpty()), "Заголовок не может быть пустым");
-        result = result && epTitle.verify(() -> tfTitle.getText().length() < LENGTH, String.format("Длина заголовка не должна превышать %d символ%s", LENGTH, StringHelper.endAfterInt(LENGTH)));
+        boolean result = epTitle.verify(() -> (!txt.isEmpty()), "Заголовок не может быть пустым");
+        result = result && epTitle.verify(() -> txt.length() < LENGTH, String.format("Длина заголовка не должна превышать %d символ%s", LENGTH, StringHelper.endAfterInt(LENGTH)));
         return result;
     }
 

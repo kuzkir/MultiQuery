@@ -16,7 +16,7 @@ import javafx.scene.image.ImageView;
 public class Database {
 
     private boolean isActive;
-    private DatabaseStatus status;
+    private transient DatabaseStatus status;
     private String title;
     private String host;
     private int port;
@@ -25,7 +25,7 @@ public class Database {
     private String password;
 
     public Database() {
-
+        this.status = DatabaseStatus.DISCONNECT;
     }
 
     public boolean getIsActive() {

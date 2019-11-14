@@ -6,7 +6,6 @@
       "databases": [
         {
           "isActive": true,
-          "status": "DISCONNECT",
           "title": "ŒŒ¿“",
           "host": "94.137.47.238",
           "port": 4850,
@@ -16,7 +15,6 @@
         },
         {
           "isActive": true,
-          "status": "DISCONNECT",
           "title": "2-4",
           "host": "94.137.47.238",
           "port": 4851,
@@ -26,7 +24,6 @@
         },
         {
           "isActive": true,
-          "status": "DISCONNECT",
           "title": "√›“ +  ÓÏ",
           "host": "94.137.47.238",
           "port": 4853,
@@ -36,7 +33,6 @@
         },
         {
           "isActive": true,
-          "status": "DISCONNECT",
           "title": "7-8",
           "host": "94.137.47.238",
           "port": 4856,

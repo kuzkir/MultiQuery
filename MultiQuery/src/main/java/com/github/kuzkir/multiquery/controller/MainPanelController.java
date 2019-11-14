@@ -6,6 +6,8 @@
 package com.github.kuzkir.multiquery.controller;
 
 import com.github.kuzkir.fxmessagebox.MessageBox;
+import com.github.kuzkir.multiquery.Main;
+import com.github.kuzkir.multiquery.engine.EngineFactory;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,7 +27,7 @@ public class MainPanelController implements Initializable {
     @FXML
     private AnchorPane sourcePane;
     @FXML
-    private AnchorPane requestPane;
+    private AnchorPane queryPane;
     @FXML
     private AnchorPane resultPane;
     
@@ -37,16 +39,40 @@ public class MainPanelController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            FXMLLoader conSourceLoader = new FXMLLoader();
-            conSourceLoader.setLocation(getClass().getResource("/fxml/ConnectionSource.fxml"));
-            Node cs = conSourceLoader.load();
-            sourcePane.getChildren().add(cs);
-            sourcePane.setTopAnchor(cs, 0.0);
-            sourcePane.setLeftAnchor(cs, 0.0);
-            sourcePane.setRightAnchor(cs, 0.0);
-            sourcePane.setBottomAnchor(cs, 0.0);
+            FXMLLoader sourceLoader = new FXMLLoader();
+            sourceLoader.setLocation(getClass().getResource("/fxml/ConnectionSource.fxml"));
+            Node src = sourceLoader.load();
+            sourcePane.getChildren().add(src);
+            sourcePane.setTopAnchor(src, 0.0);
+            sourcePane.setLeftAnchor(src, 0.0);
+            sourcePane.setRightAnchor(src, 0.0);
+            sourcePane.setBottomAnchor(src, 0.0);
+            
+            FXMLLoader resultLoader = new FXMLLoader();
+            resultLoader.setLocation(getClass().getResource("/fxml/ResultSet.fxml"));
+            Node rst = resultLoader.load();
+            resultPane.getChildren().add(rst);
+            resultPane.setTopAnchor(rst, 0.0);
+            resultPane.setLeftAnchor(rst, 0.0);
+            resultPane.setRightAnchor(rst, 0.0);
+            resultPane.setBottomAnchor(rst, 0.0);
+            
+            FXMLLoader queryLoader = new FXMLLoader();
+            queryLoader.setLocation(getClass().getResource("/fxml/QueryEditor.fxml"));
+            Node qre = queryLoader.load();
+            queryPane.getChildren().add(qre);
+            queryPane.setTopAnchor(qre, 0.0);
+            queryPane.setLeftAnchor(qre, 0.0);
+            queryPane.setRightAnchor(qre, 0.0);
+            queryPane.setBottomAnchor(qre, 0.0);
+            
+            EngineFactory.getInstance()
+                .setConnection((ConnectionSourceController) sourceLoader.getController())
+                .setQuery((QueryEditorController) queryLoader.getController())
+                .setResulte((ResultSetController) resultLoader.getController());
         } catch (IOException e) {
             MessageBox.showException("Загрузка главной формы", e);
+            Main.getPrimaryStage().close();
         }
 
     }

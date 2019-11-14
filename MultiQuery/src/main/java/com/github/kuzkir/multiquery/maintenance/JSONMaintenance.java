@@ -30,20 +30,20 @@ public abstract class JSONMaintenance<T> implements Maintenance<T> {
 
     @Override
     public T get() throws Exception {
-        synchronized (this.entity) {
-            if (isNull()) {
-                JsonHelper jh = new JsonHelper();
-                entity = createNew();
-                entity = jh.get(entityStorage, classOfT);
-            }
+        if (isNull()) {
+            JsonHelper jh = new JsonHelper();
+            entity = createNew();
+            entity = jh.get(entityStorage, classOfT);
+        }
 
+        synchronized (this) {
             return entity;
         }
     }
 
     @Override
     public T set(T entity) throws Exception {
-        synchronized (this.entity) {
+        synchronized (this) {
             this.entity = entity;
             save();
             return this.entity;

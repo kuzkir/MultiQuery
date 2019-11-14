@@ -52,6 +52,10 @@ class ConnectionSourceMaintenance extends JSONMaintenance<Source> implements Con
 
     @Override
     public DatabaseGroup addGroup(DatabaseGroup group) throws Exception {
+        if (get().getGroups().stream().anyMatch(a -> a.getTitle().equals(group.getTitle()))) {
+            return null;
+        }
+
         get().getGroups().add(group);
         save();
         return group;
@@ -59,6 +63,10 @@ class ConnectionSourceMaintenance extends JSONMaintenance<Source> implements Con
 
     @Override
     public DatabaseGroup editGroup(String title, DatabaseGroup group) throws Exception {
+        if (get().getGroups().stream().anyMatch(a -> a.getTitle().equals(group.getTitle()))) {
+            return null;
+        }
+
         get().getGroups().stream()
             .filter(a -> a.getTitle().equals(title))
             .findAny()
@@ -75,29 +83,47 @@ class ConnectionSourceMaintenance extends JSONMaintenance<Source> implements Con
 
     @Override
     public Database addBase(String groupTitle, Database base) throws Exception {
-        get().getGroups().stream()
+        Optional<DatabaseGroup> group = get().getGroups().stream()
             .filter(a -> a.getTitle().equals(groupTitle))
-            .findAny()
-            .ifPresent(a -> a.getDatabases().add(base));
+            .findAny();
+
+        if (!group.isPresent()) {
+            return null;
+        }
+
+        if (group.get().getDatabases().stream().anyMatch(a -> a.getTitle().equals(base.getTitle()))) {
+            return null;
+        }
+
+        group.get().getDatabases().add(base);
         save();
         return base;
     }
 
     @Override
     public Database editBase(String groupTitle, String baseTitle, Database base) throws Exception {
-        get().getGroups().stream()
+        Optional<DatabaseGroup> group = get().getGroups().stream()
             .filter(a -> a.getTitle().equals(groupTitle))
+            .findAny();
+
+        if (!group.isPresent()) {
+            return null;
+        }
+
+        if (group.get().getDatabases().stream().anyMatch(a -> a.getTitle().equals(base.getTitle()))) {
+            return null;
+        }
+
+        group.get().getDatabases().stream()
+            .filter(a -> a.getTitle().equals(baseTitle))
             .findAny()
-            .ifPresent(a -> a.getDatabases().stream()
-                .filter(b -> b.getTitle().equals(baseTitle))
-                .findAny()
-                .ifPresent(b -> b.setIsActive(base.getIsActive())
-                    .setStatus(base.getStatus())
-                    .setTitle(base.getTitle())
-                    .setHost(base.getHost())
-                    .setBase(base.getBase())
-                    .setUser(base.getUser())
-                    .setPassword(base.getPassword())));
+            .ifPresent(a -> a.setIsActive(base.getIsActive())
+            .setTitle(base.getTitle())
+            .setHost(base.getHost())
+            .setBase(base.getBase())
+            .setUser(base.getUser())
+            .setPassword(base.getPassword()));
+
         save();
         return base;
     }
@@ -108,9 +134,9 @@ class ConnectionSourceMaintenance extends JSONMaintenance<Source> implements Con
         Optional<DatabaseGroup> group = get().getGroups().stream()
             .filter(a -> a.getTitle().equals(groupTitle))
             .findAny();
-        if(group.isPresent()) {
+        if (group.isPresent()) {
             b = group.get().getDatabases().removeIf(a -> a.getTitle().equals(baseTitle));
-        }            
+        }
         save();
         return b;
     }

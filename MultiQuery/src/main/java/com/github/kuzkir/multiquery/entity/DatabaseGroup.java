@@ -6,9 +6,9 @@
 package com.github.kuzkir.multiquery.entity;
 
 import java.sql.Driver;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  *
@@ -18,10 +18,10 @@ public class DatabaseGroup {
 
     private String title;
     private Driver driver;
-    private Set<Database> databases;
+    private List<Database> databases;
 
     public DatabaseGroup() {
-        databases = new HashSet<>();
+        databases = new ArrayList<>();
     }
     
     public String getTitle() {
@@ -32,7 +32,7 @@ public class DatabaseGroup {
         return driver;
     }
 
-    public Set<Database> getDatabases() {
+    public List<Database> getDatabases() {
         return databases;
     }
 
@@ -46,7 +46,7 @@ public class DatabaseGroup {
         return this;
     }
 
-    public DatabaseGroup setDatabases(Set<Database> databases) {
+    public DatabaseGroup setDatabases(List<Database> databases) {
         this.databases = databases;
         return this;
     }
