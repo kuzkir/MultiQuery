@@ -9,9 +9,9 @@ package com.github.kuzkir.multiquery.engine;
  *
  * @author kuzkir
  */
-public class EngineFactory {
+public class ExecutableFactory {
 
-    private static EngineFactory instance;
+    private static ExecutableFactory instance;
 
     private Queryable query;
     private Connectable connection;
@@ -19,32 +19,32 @@ public class EngineFactory {
 
     private Engine engine;
 
-    private EngineFactory() {
+    private ExecutableFactory() {
     }
 
-    public static EngineFactory getInstance() {
+    public static ExecutableFactory getInstance() {
         if (instance == null) {
-            instance = new EngineFactory();
+            instance = new ExecutableFactory();
         }
         return instance;
     }
 
-    public EngineFactory setQuery(Queryable query) {
+    public ExecutableFactory setQuery(Queryable query) {
         this.query = query;
         return this;
     }
 
-    public EngineFactory setConnection(Connectable connection) {
+    public ExecutableFactory setConnection(Connectable connection) {
         this.connection = connection;
         return this;
     }
 
-    public EngineFactory setResulte(Resultable result) {
+    public ExecutableFactory setResulte(Resultable result) {
         this.result = result;
         return this;
     }
 
-    public Engine build() throws Exception {
+    public Executable build() throws Exception {
         if (engine == null) {
             if (query == null || connection == null || result == null) {
                 throw new Exception("Все элементы фабрики должны быть переданы");

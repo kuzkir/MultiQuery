@@ -16,8 +16,8 @@ import java.util.List;
  */
 public interface Connectable {
     
-    List<Database> getDatabases() throws Exception;
-    Driver getDriver() throws Exception;
-    void setStatus(String base, DatabaseStatus status) throws Exception;
+    List<Database> getDatabases();
+    Driver getDriver();
+    void setStatus(String base, DatabaseStatus status);
     
 }

@@ -17,18 +17,16 @@ import javafx.stage.Stage;
  * @author kuzkir
  */
 public class Main extends Application {
-    
-    
+
     private static Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("MultiQuery");
         primaryStage.setMaximized(true);
-        
-        
+
         this.primaryStage = primaryStage;
-        
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/MainPanel.fxml"));
         try {
@@ -39,13 +37,19 @@ public class Main extends Application {
                 new Image(getClass().getResourceAsStream("/Omnichannel_48.png")),
                 new Image(getClass().getResourceAsStream("/Omnichannel_64.png")));
             primaryStage.show();
+
+//            scene.setOnKeyPressed((event) -> {
+//                if (event.getCode().equals(KeyCode.F5)) {
+//                    
+//                }
+//            });
+
         } catch (Exception e) {
             MessageBox.showException("Запуск программы", e);
         }
-        
-        
+
     }
-    
+
     public static Stage getPrimaryStage() {
         return primaryStage;
     }

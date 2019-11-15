@@ -5,11 +5,32 @@
  */
 package com.github.kuzkir.multiquery.helper;
 
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+import java.sql.Driver;
+
 /**
  *
  * @author kuzkir
  */
 public class ConnectionHelper {
+    
+    public static String getConnectionURL(Driver driver, String host, int port) {
+        if(driver instanceof org.postgresql.Driver)
+            return getPgConnectionURL(host,port);
+        else if (driver instanceof SQLServerDriver)
+            return getMsConnectionURL(host, port);
+        
+        return null;
+    }
+    
+    public static String getConnectionURL(Driver driver, String host, int port, String dbName) {
+        if(driver instanceof org.postgresql.Driver)
+            return getPgConnectionURL(host,port,dbName);
+        else if (driver instanceof SQLServerDriver)
+            return getMsConnectionURL(host, port,dbName);
+        
+        return null;
+    }
 
     public static String getPgConnectionURL(String host, int port) {
         return getPgConnectionURL(host, port, "postgres");

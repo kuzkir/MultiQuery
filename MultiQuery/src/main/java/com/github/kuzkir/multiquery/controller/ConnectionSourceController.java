@@ -39,7 +39,7 @@ import javafx.stage.Stage;
  *
  * @author kuzkir
  */
-public class ConnectionSourceController implements Initializable,Connectable {
+public class ConnectionSourceController implements Initializable, Connectable {
 
     private final ConnectionSource source;
 
@@ -285,26 +285,36 @@ public class ConnectionSourceController implements Initializable,Connectable {
     }
 
     @Override
-    public List<Database> getDatabases() throws Exception {
+    public List<Database> getDatabases() {
+        try {
             DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
             return group.getDatabases().stream()
                 .filter(a -> a.getIsActive())
                 .collect(Collectors.toList());
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
-    public Driver getDriver() throws Exception {
-        DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
+    public Driver getDriver() {
+        try {
+            DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
             return group.getDriver();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
-    public void setStatus(String base, DatabaseStatus status) throws Exception {
-        DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
-        group.getDatabases().stream()
-            .filter(a -> a.getTitle().equals(base))
-            .findAny()
-            .ifPresent(a -> a.setStatus(status));
-        updateBase();
+    public void setStatus(String base, DatabaseStatus status) {
+        try {
+            DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
+            group.getDatabases().stream()
+                .filter(a -> a.getTitle().equals(base))
+                .findAny()
+                .ifPresent(a -> a.setStatus(status));
+            updateBase();
+        } catch (Exception e) {}
     }
 }

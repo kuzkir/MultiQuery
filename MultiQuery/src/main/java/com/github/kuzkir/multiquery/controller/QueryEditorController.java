@@ -24,5 +24,10 @@ public class QueryEditorController implements Initializable, Queryable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    @Override
+    public String getQuery() {
+        return "select * from tbParks";
+    }
     
 }

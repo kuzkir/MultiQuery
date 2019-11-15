@@ -11,4 +11,5 @@ package com.github.kuzkir.multiquery.engine;
  */
 public interface Queryable {
     
+    public String getQuery();
 }

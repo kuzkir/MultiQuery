@@ -5,15 +5,11 @@
  */
 package com.github.kuzkir.multiquery.engine;
 
-import java.sql.ResultSet;
-
 /**
  *
  * @author kuzkir
  */
-public interface Resultable {
+public interface Executable extends AutoCloseable {
     
-    void setResult(ResultSet resultSet);
-    void clear();
-    void setStatus(String status);
+    void execute() throws Exception;
 }
