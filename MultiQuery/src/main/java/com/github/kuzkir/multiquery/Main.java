@@ -38,12 +38,6 @@ public class Main extends Application {
                 new Image(getClass().getResourceAsStream("/Omnichannel_64.png")));
             primaryStage.show();
 
-//            scene.setOnKeyPressed((event) -> {
-//                if (event.getCode().equals(KeyCode.F5)) {
-//                    
-//                }
-//            });
-
         } catch (Exception e) {
             MessageBox.showException("Запуск программы", e);
         }

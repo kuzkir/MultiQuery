@@ -65,7 +65,7 @@ public class Database {
             return new ImageView(new Image(getClass().getResourceAsStream("/Disconnected-16.png")));
         
         switch(this.status) {
-            case CONNECTED:
+            case CONNECT:
                 return new ImageView(new Image(getClass().getResourceAsStream("/Connected-16.png")));
                 
             case LOAD:

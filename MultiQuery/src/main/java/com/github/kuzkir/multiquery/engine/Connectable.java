@@ -19,5 +19,6 @@ public interface Connectable {
     List<Database> getDatabases();
     Driver getDriver();
     void setStatus(String base, DatabaseStatus status);
+    void setInfo(String base, String info);
     
 }

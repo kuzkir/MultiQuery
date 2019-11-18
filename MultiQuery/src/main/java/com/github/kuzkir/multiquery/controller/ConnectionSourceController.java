@@ -315,6 +315,13 @@ public class ConnectionSourceController implements Initializable, Connectable {
                 .findAny()
                 .ifPresent(a -> a.setStatus(status));
             updateBase();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
+
+    @Override
+    public void setInfo(String base, String info) {
+        
+    }
+
 }

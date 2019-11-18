@@ -11,6 +11,8 @@ import com.github.kuzkir.multiquery.helper.ConnectionHelper;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +30,9 @@ class Engine implements Executable {
     private final Connectable connection;
     private final Resultable result;
 
-    private final Map<String, Connection> map;
+    private final Map<String, Connection> connectionMap;
+    private final Map<String, Thread> threadMap;
+    private final Map<String, ResultSet> resultMap;
 
     private Thread currentThread;
 
@@ -37,12 +41,14 @@ class Engine implements Executable {
         this.connection = connection;
         this.result = result;
 
-        this.map = new HashMap<>();
+        this.connectionMap = new HashMap<>();
+        this.threadMap = new HashMap<>();
+        this.resultMap = new HashMap<>();
     }
 
     @Override
     public void close() throws Exception {
-        for (Map.Entry<String, Connection> entry : map.entrySet()) {
+        for (Map.Entry<String, Connection> entry : connectionMap.entrySet()) {
             entry.getValue().close();
         }
     }
@@ -51,16 +57,26 @@ class Engine implements Executable {
     public void execute() throws Exception {
 
         currentThread = new Thread(() -> {
-            try {//очищаем результат и запускаем форму ожидания
+            try {
+                //очищаем результат и запускаем форму ожидания
                 startExecute();
 
                 //обрабатываем подключения
                 formConnections();
 
                 //анализируем запрос
+                analyzeQuery();
+
                 //вызываем запрос по всем подключениям 
+                multiThreadExecute();
+
+                //агрегируем и формируем результат
+                formResult();
+
+                //отображаем результат
                 endExecute();
             } catch (Exception e) {
+                throw e;
             } finally {
                 endExecute();
             }
@@ -74,7 +90,9 @@ class Engine implements Executable {
 
         Platform.runLater(() -> {
             result.setStatus("Очистка результатов");
-            result.clear();
+        });
+        result.clear();
+        Platform.runLater(() -> {
             result.setStatus("Обработка подключений");
         });
     }
@@ -92,7 +110,7 @@ class Engine implements Executable {
         Driver driver = connection.getDriver();
         List<String> forRemove = new ArrayList<>();
 
-        for (Map.Entry<String, Connection> e : map.entrySet()) {
+        for (Map.Entry<String, Connection> e : connectionMap.entrySet()) {
             if (!titles.contains(e.getKey())) {
                 try {
                     forRemove.add(e.getKey());
@@ -104,18 +122,18 @@ class Engine implements Executable {
                 });
             }
         }
-        for(String r : forRemove) {
-            map.remove(r);
+        for (String r : forRemove) {
+            connectionMap.remove(r);
         }
 
         for (Database db : list) {
-            if (!map.containsKey(db.getTitle())) {
+            if (!connectionMap.containsKey(db.getTitle())) {
                 String url = ConnectionHelper.getConnectionURL(driver, db.getHost(), db.getPort(), db.getBase());
                 try {
                     Connection con = DriverManager.getConnection(url, db.getUser(), db.getPassword());
-                    map.put(db.getTitle(), con);
+                    connectionMap.put(db.getTitle(), con);
                     Platform.runLater(() -> {
-                        connection.setStatus(db.getTitle(), DatabaseStatus.CONNECTED);
+                        connection.setStatus(db.getTitle(), DatabaseStatus.CONNECT);
                     });
                 } catch (Exception e) {
                     Platform.runLater(() -> {
@@ -126,4 +144,72 @@ class Engine implements Executable {
         }
     }
 
+    private void analyzeQuery() {
+
+        Platform.runLater(() -> {
+            result.setStatus("Анализ запроса");
+        });
+    }
+
+    private void multiThreadExecute() {
+        Platform.runLater(() -> {
+            result.setStatus("Формирование стека запросов");
+        });
+
+        for (Map.Entry<String, Connection> con : connectionMap.entrySet()) {
+            Thread th = new Thread(() -> {
+                try {
+                    Statement st = con.getValue().createStatement();
+                    resultMap.put(con.getKey(), st.executeQuery(query.getQuery()));
+                } catch (Exception e) {
+                    Platform.runLater(() -> {
+                        connection.setStatus(con.getKey(), DatabaseStatus.ERROR);
+                        connection.setInfo(con.getKey(), e.getMessage());
+                    });
+                }
+            });
+
+            threadMap.put(con.getKey(), th);
+            th.start();
+
+            Platform.runLater(() -> {
+                connection.setStatus(con.getKey(), DatabaseStatus.LOAD);
+            });
+        }
+
+    }
+
+    private void formResult() {
+
+        boolean done = false;
+
+        while (!done) {
+            done = true;
+            for (Map.Entry<String, Thread> tm : threadMap.entrySet()) {
+                done = !tm.getValue().isAlive() && done;
+            }
+        }
+        Platform.runLater(() -> {
+            result.setStatus("Формирование результатов");
+        });
+
+        for (Map.Entry<String, ResultSet> rm : resultMap.entrySet()) {
+            ResultSet rs = rm.getValue();
+            try {
+                int c = rs.getMetaData().getColumnCount();
+                Platform.runLater(() -> {
+                    connection.setInfo(rm.getKey(), String.format("Число столбцов: %d", c));
+                });
+            } catch (Exception e) {
+                Platform.runLater(() -> {
+                    connection.setInfo(rm.getKey(), String.format("Не удалось вычислить число столбцов"));
+                });
+            }
+
+            Platform.runLater(() -> {
+                connection.setStatus(rm.getKey(), DatabaseStatus.COMPLETE);
+            });
+        }
+
+    }
 }

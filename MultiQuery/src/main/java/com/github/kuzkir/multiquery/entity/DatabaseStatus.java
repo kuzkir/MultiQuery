@@ -10,5 +10,5 @@ package com.github.kuzkir.multiquery.entity;
  * @author kuzkir
  */
 public enum DatabaseStatus {
-    CONNECTED, LOAD, COMPLETE, ERROR, DISCONNECT
+    CONNECT, LOAD, COMPLETE, ERROR, DISCONNECT
 }
