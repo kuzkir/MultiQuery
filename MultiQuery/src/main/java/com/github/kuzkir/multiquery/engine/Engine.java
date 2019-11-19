@@ -87,11 +87,16 @@ class Engine implements Executable {
     }
 
     private void startExecute() {
+        
+        threadMap.clear();
+        resultMap.clear();
 
         Platform.runLater(() -> {
             result.setStatus("Очистка результатов");
         });
-        result.clear();
+        Platform.runLater(() -> {
+            result.clear();
+        });        
         Platform.runLater(() -> {
             result.setStatus("Обработка подключений");
         });
@@ -194,19 +199,10 @@ class Engine implements Executable {
         });
 
         for (Map.Entry<String, ResultSet> rm : resultMap.entrySet()) {
-            ResultSet rs = rm.getValue();
-            try {
-                int c = rs.getMetaData().getColumnCount();
-                Platform.runLater(() -> {
-                    connection.setInfo(rm.getKey(), String.format("Число столбцов: %d", c));
-                });
-            } catch (Exception e) {
-                Platform.runLater(() -> {
-                    connection.setInfo(rm.getKey(), String.format("Не удалось вычислить число столбцов"));
-                });
-            }
-
+            
+            
             Platform.runLater(() -> {
+                result.setResult(rm.getKey(), rm.getValue());
                 connection.setStatus(rm.getKey(), DatabaseStatus.COMPLETE);
             });
         }

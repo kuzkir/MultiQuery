@@ -5,9 +5,11 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -52,15 +54,15 @@
                   <Tooltip text="Изменить параметры группы" />
                </tooltip>
             </Button>
-            <ComboBox fx:id="cbConnectionGroup" maxWidth="1.7976931348623157E308" onAction="#cbConnectionGroup_onAction" prefWidth="290.0" HBox.hgrow="ALWAYS" />
+            <ComboBox fx:id="cbConnectionGroup" maxWidth="1.7976931348623157E308" onAction="#cbConnectionGroup_onAction" prefWidth="220.0" HBox.hgrow="ALWAYS" />
          </children>
          <padding>
-            <Insets bottom="2.0" left="5.0" right="30.0" top="2.0" />
+            <Insets bottom="2.0" left="30.0" right="30.0" top="2.0" />
          </padding>
       </HBox>
    </top>
    <right>
-      <VBox alignment="TOP_CENTER" maxWidth="30.0" minWidth="30.0" prefHeight="400.0" prefWidth="124.0" spacing="5.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" maxWidth="30.0" minWidth="30.0" spacing="5.0" BorderPane.alignment="CENTER">
          <children>
             <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#btnAddConnection_onAction" prefHeight="25.0" prefWidth="25.0">
                <graphic>
@@ -116,4 +118,57 @@
          </columnResizePolicy>
       </TableView>
    </center>
+   <bottom>
+      <AnchorPane>
+         <children>
+            <TextField fx:id="tfInfo" editable="false" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="2.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </TextField>
+         </children>
+      </AnchorPane>
+   </bottom>
+   <left>
+      <VBox alignment="TOP_CENTER" maxWidth="30.0" minWidth="30.0">
+         <children>
+            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Checked%20Checkbox-16.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Включить все" />
+               </tooltip>
+            </Button>
+            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Unchecked%20Checkbox-16.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Исключить все" />
+               </tooltip>
+            </Button>
+            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Invert%20Selection-16.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Инверсия" />
+               </tooltip>
+            </Button>
+         </children>
+      </VBox>
+   </left>
 </BorderPane>

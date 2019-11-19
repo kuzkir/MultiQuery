@@ -13,7 +13,7 @@ import java.sql.ResultSet;
  */
 public interface Resultable {
     
-    void setResult(ResultSet resultSet);
+    void setResult(String base, ResultSet resultSet);
     void clear();
     void setStatus(String status);
 }

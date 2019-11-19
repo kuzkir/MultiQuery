@@ -12,14 +12,16 @@ import com.github.kuzkir.multiquery.entity.DatabaseGroup;
 import com.github.kuzkir.multiquery.maintenance.ConnectionSource;
 import com.github.kuzkir.multiquery.engine.Connectable;
 import com.github.kuzkir.multiquery.entity.DatabaseStatus;
+import com.github.kuzkir.multiquery.helper.ConnectionHelper;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Driver;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -27,7 +29,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
@@ -42,6 +46,7 @@ import javafx.stage.Stage;
 public class ConnectionSourceController implements Initializable, Connectable {
 
     private final ConnectionSource source;
+    private final Map<String,String> infoMap;
 
     @FXML
     private ComboBox<String> cbConnectionGroup;
@@ -53,9 +58,12 @@ public class ConnectionSourceController implements Initializable, Connectable {
     private TableColumn<Database, ImageView> tcStatus;
     @FXML
     private TableColumn<Database, String> tcTitle;
+    @FXML
+    private TextField tfInfo;
 
     public ConnectionSourceController() {
         source = new ConnectionSourceMaintenance();
+        infoMap = new HashMap<>();
     }
 
     /**
@@ -64,12 +72,26 @@ public class ConnectionSourceController implements Initializable, Connectable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         updateGroup(null);
+        
+        tbDatabase.setRowFactory(tv -> {
+            TableRow<Database> tr = new TableRow<>();
+            tr.setOnMouseClicked(e -> {
+                if(!tr.isEmpty()) {
+                    Database db = tr.getItem();
+                    tfInfo.setText(infoMap.containsKey(db.getTitle())
+                    ? infoMap.get(db.getTitle())
+                        : ConnectionHelper.getConnectionURL(getDriver(), db.getHost(), db.getPort(), db.getBase()));
+                }
+            });
+            
+            return tr;
+        });
 
-        tcActive.setCellValueFactory((TableColumn.CellDataFeatures<Database, Boolean> param) -> {
-            Database db = param.getValue();
+        tcActive.setCellValueFactory(cvf -> {
+            Database db = cvf.getValue();
             SimpleBooleanProperty bp = new SimpleBooleanProperty(db.getIsActive());
 
-            bp.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            bp.addListener((observable, oldValue, newValue) -> {
                 try {
                     db.setIsActive(newValue);
                     String group = cbConnectionGroup.getValue();
@@ -82,7 +104,7 @@ public class ConnectionSourceController implements Initializable, Connectable {
             return bp;
         });
 
-        tcActive.setCellFactory((TableColumn<Database, Boolean> param) -> {
+        tcActive.setCellFactory(cf -> {
             return new CheckBoxTableCell<>();
         });
 
@@ -321,7 +343,7 @@ public class ConnectionSourceController implements Initializable, Connectable {
 
     @Override
     public void setInfo(String base, String info) {
-        
+        infoMap.put(base, info);
     }
 
 }

@@ -8,7 +8,9 @@ package com.github.kuzkir.multiquery.controller;
 import com.github.kuzkir.multiquery.engine.Queryable;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextArea;
 
 /**
  * FXML Controller class
@@ -17,6 +19,9 @@ import javafx.fxml.Initializable;
  */
 public class QueryEditorController implements Initializable, Queryable {
 
+    @FXML
+    private TextArea textArea;
+    
     /**
      * Initializes the controller class.
      */
@@ -27,7 +32,7 @@ public class QueryEditorController implements Initializable, Queryable {
 
     @Override
     public String getQuery() {
-        return "select * from tbParks";
+        return textArea.getText();
     }
     
 }

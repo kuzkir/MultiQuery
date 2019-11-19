@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -9,9 +10,13 @@
 
 <BorderPane stylesheets="@../styles/common.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.kuzkir.multiquery.controller.ResultSetController">
    <center>
-      <StackPane fx:id="spPane" BorderPane.alignment="CENTER">
+      <StackPane fx:id="stackPane" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="tvTable" focusTraversable="false" visible="false" />
+            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" visible="false">
+               <content>
+                  <TableView fx:id="tableView" focusTraversable="false" />
+               </content>
+            </ScrollPane>
             <VBox fx:id="vbProgress" alignment="CENTER" visible="false">
                <children>
                   <ProgressIndicator />
