@@ -5,7 +5,7 @@
  */
 package com.github.kuzkir.multiquery.controller;
 
-import com.github.kuzkir.fxmessagebox.ErrorProvider;
+import com.github.kuzkir.fxcontrol.ErrorProvider;
 import com.github.kuzkir.multiquery.entity.DatabaseGroup;
 import com.github.kuzkir.multiquery.helper.StringHelper;
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;

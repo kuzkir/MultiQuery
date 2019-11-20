@@ -5,7 +5,7 @@
  */
 package com.github.kuzkir.multiquery;
 
-import com.github.kuzkir.fxmessagebox.MessageBox;
+import com.github.kuzkir.fxcontrol.MessageBox;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

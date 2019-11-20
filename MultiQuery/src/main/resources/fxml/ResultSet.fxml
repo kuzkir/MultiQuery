@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
@@ -14,7 +15,10 @@
          <children>
             <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" visible="false">
                <content>
-                  <TableView fx:id="tableView" focusTraversable="false" />
+                  <TableView fx:id="tableView" focusTraversable="false">
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </padding></TableView>
                </content>
             </ScrollPane>
             <VBox fx:id="vbProgress" alignment="CENTER" visible="false">

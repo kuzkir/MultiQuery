@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.BorderPane?>
+<?import org.fxmisc.richtext.CodeArea?>
+
 
 <BorderPane stylesheets="@../styles/common.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.kuzkir.multiquery.controller.QueryEditorController">
    <center>
-      <TextArea fx:id="textArea" focusTraversable="false" BorderPane.alignment="CENTER" />
+      <CodeArea fx:id="codeArea" autoScrollOnDragDesired="false" lineHighlighterOn="true" stylesheets="@../styles/query.css" wrapText="true" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

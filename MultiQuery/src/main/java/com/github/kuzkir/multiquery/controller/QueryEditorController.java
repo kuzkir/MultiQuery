@@ -10,7 +10,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextArea;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
 
 /**
  * FXML Controller class
@@ -19,20 +20,30 @@ import javafx.scene.control.TextArea;
  */
 public class QueryEditorController implements Initializable, Queryable {
 
-    @FXML
-    private TextArea textArea;
+    private static final String[] KEYWORDS = new String[] {
+        "select", "top", "with", "as", "from", "join", "inner", "full", "left", "right", "on",
+        "where", "and", "not", "in", "like", "order", "by", "asc", "desc", "group", "having",
+        "begin", "end", "case", "when", "then", "else", "if", "while"
+    };
     
+    private static final String[] FUNCTION = new String[] {
+        "min", "max", "avg", "ascii", "row_number", "rank", "dense_rank", "getdate"
+    };
+
+    @FXML
+    private CodeArea codeArea;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+        codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));        
+    }
 
     @Override
     public String getQuery() {
-        return textArea.getText();
+        return codeArea.getText();
     }
-    
+
 }

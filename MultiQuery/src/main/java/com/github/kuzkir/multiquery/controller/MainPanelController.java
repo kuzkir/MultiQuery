@@ -5,7 +5,7 @@
  */
 package com.github.kuzkir.multiquery.controller;
 
-import com.github.kuzkir.fxmessagebox.MessageBox;
+import com.github.kuzkir.fxcontrol.MessageBox;
 import com.github.kuzkir.multiquery.Main;
 import com.github.kuzkir.multiquery.engine.Executable;
 import com.github.kuzkir.multiquery.engine.ExecutableFactory;

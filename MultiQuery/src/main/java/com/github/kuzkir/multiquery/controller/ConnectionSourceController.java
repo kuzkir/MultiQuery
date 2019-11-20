@@ -5,7 +5,7 @@
  */
 package com.github.kuzkir.multiquery.controller;
 
-import com.github.kuzkir.fxmessagebox.MessageBox;
+import com.github.kuzkir.fxcontrol.MessageBox;
 import com.github.kuzkir.multiquery.Main;
 import com.github.kuzkir.multiquery.entity.Database;
 import com.github.kuzkir.multiquery.entity.DatabaseGroup;
@@ -229,6 +229,45 @@ public class ConnectionSourceController implements Initializable, Connectable {
             MessageBox.showException("Изменение подключения", e);
         }
     }
+    
+    @FXML
+    void btnInvert_onAction() {
+        try {
+            DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
+            if (group != null) {
+                group.getDatabases().forEach(db -> db.setIsActive(!db.getIsActive()));
+            }
+        } catch (Exception e) {
+            MessageBox.showException("Обновление списка групп", e);
+        }
+        updateBase();
+    }
+
+    @FXML
+    void btnSelectAll_onAction() {
+        try {
+            DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
+            if (group != null) {
+                group.getDatabases().forEach(db -> db.setIsActive(true));
+            }
+        } catch (Exception e) {
+            MessageBox.showException("Обновление списка групп", e);
+        }
+        updateBase();
+    }
+
+    @FXML
+    void btnUnselectAll_onAction() {
+        try {
+            DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
+            if (group != null) {
+                group.getDatabases().forEach(db -> db.setIsActive(false));
+            }
+        } catch (Exception e) {
+            MessageBox.showException("Обновление списка групп", e);
+        }
+        updateBase();
+    }
 
     private DatabaseGroup databaseGroupEditForm(DatabaseGroup group) throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -302,7 +341,7 @@ public class ConnectionSourceController implements Initializable, Connectable {
                 tbDatabase.getItems().addAll(group.getDatabases());
             }
         } catch (Exception e) {
-            MessageBox.showException("Обновление списка групп", e);
+            MessageBox.showException("Обновление списка подключений", e);
         }
     }
 
