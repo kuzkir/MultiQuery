@@ -13,16 +13,20 @@ and open the template in the editor.
     -fx-font-size: 14;
 }
 
+.main-selection {
+    -fx-fill: #b2dffb;
+}
+
 .lineno {
     -fx-font-style: italic;
 }
 
 .paragraph-box:has-caret {
-    -fx-background-color: #f2f9fc;
+    -fx-background-color: #def1fd;
 }
 
 .line-highlighter {
-    -fx-fill: #f2f9fc; 
+    -fx-fill: #def1fd; 
 }
 
 .sql-keyword {
@@ -31,7 +35,8 @@ and open the template in the editor.
 }
 
 .sql-function {
-    -fx-fill: pink;
+    -fx-fill: #d01078;    
+    -fx-font-weight: bold;
 }
 
 .sql-number {
@@ -43,5 +48,7 @@ and open the template in the editor.
 }
 
 .sql-comment {
-    -fx-fill: yellow;
+    -fx-fill: grey;
 }
+
+.sql-title {}
