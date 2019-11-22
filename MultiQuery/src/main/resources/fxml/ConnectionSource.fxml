@@ -9,7 +9,6 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -42,7 +41,7 @@
                   <Tooltip text="Удалить группу" />
                </tooltip>
             </Button>
-            <Button mnemonicParsing="false" onAction="#btnEditGroup_onAction">
+            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#btnEditGroup_onAction" prefHeight="25.0" prefWidth="25.0">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -119,15 +118,14 @@
       </TableView>
    </center>
    <bottom>
-      <AnchorPane>
-         <children>
-            <TextField fx:id="tfInfo" editable="false" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="2.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </TextField>
-         </children>
-      </AnchorPane>
+      <TextField fx:id="tfInfo" editable="false">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <BorderPane.margin>
+            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+         </BorderPane.margin>
+      </TextField>
    </bottom>
    <left>
       <VBox alignment="TOP_CENTER" maxWidth="30.0" minWidth="30.0">

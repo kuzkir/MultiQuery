@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 
 <BorderPane stylesheets="@../styles/common.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.kuzkir.multiquery.controller.MainPanelController">
    <center>
@@ -23,58 +18,4 @@
         </items>
       </SplitPane>
    </center>
-   <top>
-      <HBox BorderPane.alignment="CENTER">
-         <children>
-            <Button mnemonicParsing="false" text="Открыть">
-               <graphic>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Open%20Folder-16.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <tooltip>
-                  <Tooltip text="Empty Tooltip" />
-               </tooltip>
-            </Button>
-            <Button mnemonicParsing="false" text="Сохранить">
-               <graphic>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Save-16.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <tooltip>
-                  <Tooltip text="Empty Tooltip" />
-               </tooltip>
-            </Button>
-            <Button mnemonicParsing="false" text="Сохранить как...">
-               <graphic>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Save%20as-16.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <tooltip>
-                  <Tooltip text="Empty Tooltip" />
-               </tooltip>
-            </Button>
-            <Button mnemonicParsing="false" onAction="#btnExecute_onAction" text="Выполнить (F5)">
-               <graphic>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Play-16.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <tooltip>
-                  <Tooltip text="Empty Tooltip" />
-               </tooltip>
-            </Button>
-         </children>
-      </HBox>
-   </top>
 </BorderPane>

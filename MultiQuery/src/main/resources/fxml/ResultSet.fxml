@@ -5,20 +5,22 @@
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane stylesheets="@../styles/common.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.kuzkir.multiquery.controller.ResultSetController">
    <center>
-      <StackPane fx:id="stackPane" BorderPane.alignment="CENTER">
+      <StackPane BorderPane.alignment="CENTER">
          <children>
             <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" visible="false">
                <content>
                   <TableView fx:id="tableView" focusTraversable="false">
                      <padding>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                     </padding></TableView>
+                     </padding>
+                  </TableView>
                </content>
             </ScrollPane>
             <VBox fx:id="vbProgress" alignment="CENTER" visible="false">
@@ -30,4 +32,11 @@
          </children>
       </StackPane>
    </center>
+   <top>
+      <TextField fx:id="tfFilter" onKeyReleased="#tfFilter_onKeyReleased" promptText="Фильтр" visible="false" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+         </BorderPane.margin>
+      </TextField>
+   </top>
 </BorderPane>

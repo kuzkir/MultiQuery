@@ -69,33 +69,60 @@ public class MainPanelController implements Initializable {
             queryPane.setRightAnchor(qre, 0.0);
             queryPane.setBottomAnchor(qre, 0.0);
 
+            ConnectionSourceController cs = (ConnectionSourceController) sourceLoader.getController();
+            QueryEditorController qe = (QueryEditorController) queryLoader.getController();
+            ResultSetController rs = (ResultSetController) resultLoader.getController();
+
             exe = ExecutableFactory.getInstance()
-                .setConnection((ConnectionSourceController) sourceLoader.getController())
-                .setQuery((QueryEditorController) queryLoader.getController())
-                .setResulte((ResultSetController) resultLoader.getController())
+                .setConnection(cs)
+                .setQuery(qe)
+                .setResulte(rs)
                 .build();
             
+            qe.setExecutable(exe);
+
             Main.getPrimaryStage().addEventHandler(KeyEvent.KEY_PRESSED, key -> {
-                if(key.getCode().equals(KeyCode.F5))
-                    btnExecute_onAction();
+                if (key.getCode().equals(KeyCode.F5)) {
+                    qe.btnExecute_onAction();            
+                }
             });
             
+            Main.getPrimaryStage().addEventHandler(KeyEvent.KEY_PRESSED, key -> {
+                if (key.isControlDown() && key.getCode().equals(KeyCode.O)) {
+                    qe.btnOpen_onAction();          
+                }
+            });
             
+            Main.getPrimaryStage().addEventHandler(KeyEvent.KEY_PRESSED, key -> {
+                if (key.getCode().equals(KeyCode.F3)) {
+                    qe.btnOpen_onAction();
+                }
+            });
+            
+            Main.getPrimaryStage().addEventHandler(KeyEvent.KEY_PRESSED, key -> {
+                if (key.isControlDown() && key.getCode().equals(KeyCode.S)) {
+                    qe.btnSave_onAction();
+                }
+            });
+            
+            Main.getPrimaryStage().addEventHandler(KeyEvent.KEY_PRESSED, key -> {
+                if (key.getCode().equals(KeyCode.F4)) {
+                    qe.btnSave_onAction();
+                }
+            });
+            
+            Main.getPrimaryStage().addEventHandler(KeyEvent.KEY_PRESSED, key -> {
+                if (key.isControlDown() && key.getCode().equals(KeyCode.F4)) {
+                    qe.btnSaveAs_onAction();
+                }
+            });
+
         } catch (IOException e) {
             MessageBox.showException("Загрузка главной формы", e);
             Main.getPrimaryStage().close();
         } catch (Exception e) {
             MessageBox.showException("Загрузка движка", e);
             Main.getPrimaryStage().close();
-        }
-    }
-
-    @FXML
-    private void btnExecute_onAction() {
-        try {
-            exe.execute();
-        } catch (Exception e) {
-            MessageBox.showException("Выполнение запроса", e);
         }
     }
 

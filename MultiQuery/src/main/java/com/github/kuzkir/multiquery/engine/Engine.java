@@ -87,7 +87,7 @@ class Engine implements Executable {
     }
 
     private void startExecute() {
-        
+
         threadMap.clear();
         resultMap.clear();
 
@@ -96,7 +96,7 @@ class Engine implements Executable {
         });
         Platform.runLater(() -> {
             result.clear();
-        });        
+        });
         Platform.runLater(() -> {
             result.setStatus("Обработка подключений");
         });
@@ -116,15 +116,17 @@ class Engine implements Executable {
         List<String> forRemove = new ArrayList<>();
 
         for (Map.Entry<String, Connection> e : connectionMap.entrySet()) {
-            if (!titles.contains(e.getKey())) {
-                try {
+            try {
+                if (!titles.contains(e.getKey()) || e.getValue().isClosed()) {
+
                     forRemove.add(e.getKey());
                     e.getValue().close();
-                } catch (Exception ex) {
                 }
                 Platform.runLater(() -> {
                     connection.setStatus(e.getKey(), DatabaseStatus.DISCONNECT);
                 });
+            } catch (Exception ex) {
+                forRemove.add(e.getKey());
             }
         }
         for (String r : forRemove) {
@@ -166,6 +168,9 @@ class Engine implements Executable {
                 try {
                     Statement st = con.getValue().createStatement();
                     resultMap.put(con.getKey(), st.executeQuery(query.getQuery()));
+                    Platform.runLater(() -> {
+                        connection.setStatus(con.getKey(), DatabaseStatus.COMPLETE);
+                    });
                 } catch (Exception e) {
                     Platform.runLater(() -> {
                         connection.setStatus(con.getKey(), DatabaseStatus.ERROR);
@@ -197,15 +202,54 @@ class Engine implements Executable {
         Platform.runLater(() -> {
             result.setStatus("Формирование результатов");
         });
+        
+        Concur
 
-        for (Map.Entry<String, ResultSet> rm : resultMap.entrySet()) {
-            
-            
-            Platform.runLater(() -> {
-                result.setResult(rm.getKey(), rm.getValue());
-                connection.setStatus(rm.getKey(), DatabaseStatus.COMPLETE);
-            });
-        }
+        
+        
+//        try {
+//                String BASE_TITLE = "_base";
+//
+//                if (tableView.getColumns().isEmpty()) {
+//                    TableColumn<Map<String, Object>, Object> baseCol = new TableColumn(BASE_TITLE);
+//                    baseCol.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().get(BASE_TITLE)));
+//                    tableView.getColumns().add(baseCol);
+//                }
+//
+//                int cc = resultSet.getMetaData().getColumnCount();
+//                for (int i = 1; i <= cc; i++) {
+//                    String title = resultSet.getMetaData().getColumnName(i);
+//
+//                    if (!columnList.contains(title)) {
+//                        columnList.add(title);
+//
+//                        TableColumn<Map<String, Object>, Object> col = new TableColumn<>(title);
+//                        col.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().get(title)));
+//
+//                        tableView.getColumns().add(col);
+//                    }
+//                }
+//
+//                while (resultSet.next()) {
+//                    Map<String, Object> map = new HashMap<>();
+//                    map.put(BASE_TITLE, base);
+//                    for (String t : columnList) {
+//                        try {
+//                            map.put(t, resultSet.getObject(t));
+//                        } catch (Exception ex) {
+//                            map.put(t, null);
+//                        }
+//                    }
+//                    tableView.getItems().add(map);
+//                    data.add(map);
+//                }
+//
+//                tableView.scrollTo(0);
+//                tableView.scrollToColumnIndex(0);
+//            } catch (Exception e) {
+//            }
+//        }
+        
 
     }
 }

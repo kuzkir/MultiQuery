@@ -5,7 +5,14 @@
  */
 package com.github.kuzkir.multiquery.controller;
 
+import com.github.kuzkir.fxcontrol.MessageBox;
+import com.github.kuzkir.multiquery.Main;
+import com.github.kuzkir.multiquery.engine.Executable;
 import com.github.kuzkir.multiquery.engine.Queryable;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Collection;
@@ -18,6 +25,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
+import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -31,7 +41,11 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
 public class QueryEditorController implements Initializable, Queryable {
 
     @FXML
+    private BorderPane borderPane;
+
     private CodeArea codeArea;
+    private Executable exe;
+    private File file;
 
     private static final String[] KEYWORDS = new String[]{
         "select", "top", "with", "as", "from", "join", "inner", "full", "left", "right", "on",
@@ -39,7 +53,7 @@ public class QueryEditorController implements Initializable, Queryable {
         "begin", "end", "case", "when", "then", "else", "if", "while", "create", "table", "declare",
         "int", "smallint", "bigint", "char", "varchar", "nchar", "nvarchar", "float", "real", "double",
         "bit", "bool", "over", "partition", "primary", "key", "insert", "into", "exec", "execute",
-        "identity", "update", "set", "values", "distinct", "drop", "alter", "delete"
+        "identity", "update", "set", "values", "distinct", "drop", "alter", "delete", "union", "all"
     };
 
     private static final String[] FUNCTION = new String[]{
@@ -71,19 +85,99 @@ public class QueryEditorController implements Initializable, Queryable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        codeArea = new CodeArea();
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
+        codeArea.getStylesheets().add(getClass().getResource("/styles/query.css").toExternalForm());
+        VirtualizedScrollPane scrollPane = new VirtualizedScrollPane<>(codeArea);
+        borderPane.setCenter(scrollPane);
+
         codeArea.multiPlainChanges().successionEnds(Duration.ofMillis(100))
             .subscribe(a -> codeArea.setStyleSpans(0, computeHighlighting()));
+
         codeArea.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 int caretPosition = codeArea.getCaretPosition();
                 int currentParagraph = codeArea.getCurrentParagraph();
-                Matcher m0 = whiteSpace.matcher(codeArea.getParagraph(currentParagraph - 1).getSegments().get(0));
-                if (m0.find()) {
-                    Platform.runLater(() -> codeArea.insertText(caretPosition, m0.group()));
+                Matcher m = whiteSpace.matcher(codeArea.getParagraph(currentParagraph - 1).getSegments().get(0));
+                if (m.find()) {
+                    Platform.runLater(() -> codeArea.insertText(caretPosition, m.group()));
                 }
             }
         });
+    }
+
+    @FXML
+    void btnExecute_onAction() {
+        try {
+            exe.execute();
+        } catch (Exception e) {
+            MessageBox.showException("Выполнение запроса", e);
+        }
+    }
+
+    @FXML
+    void btnOpen_onAction() {
+        FileChooser fc = new FileChooser();
+        if (file != null) {
+            fc.setInitialDirectory(file.getParentFile());
+        }
+        File f = fc.showOpenDialog(Main.getPrimaryStage());
+        if (f == null) {
+            return;
+        }
+        
+        try (BufferedReader r = new BufferedReader(new FileReader(f))) {
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            String ls = System.getProperty("line.separator");
+
+            while ((line = r.readLine()) != null) {
+                sb.append(line);
+                sb.append(ls);
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            
+            codeArea.replaceText(sb.toString());
+            file = f;
+        } catch (Exception e) {
+            MessageBox.showException("Открытие файла", e);
+        }
+    }
+
+    @FXML
+    void btnSaveAs_onAction() {
+        FileChooser fc = new FileChooser();
+        if (file != null) {
+            fc.setInitialDirectory(file.getParentFile());
+        }
+        File f = fc.showSaveDialog(Main.getPrimaryStage());
+        if (f == null) {
+            return;
+        }
+        try (FileWriter fw = new FileWriter(f);) {
+            fw.write(codeArea.getText());
+            file = f;
+        } catch (Exception e) {
+            MessageBox.showException("Сохранение файла", e);
+        }
+    }
+
+    @FXML
+    void btnSave_onAction() {
+        if (file == null) {
+            btnSaveAs_onAction();
+            return;
+        }
+        try (FileWriter fw = new FileWriter(file)) {
+            fw.write(codeArea.getText());
+        } catch (Exception e) {
+            MessageBox.showException("Сохранение файла", e);
+        }
+    }
+
+    void setExecutable(Executable exe) {
+        this.exe = exe;
     }
 
     @Override
@@ -107,7 +201,6 @@ public class QueryEditorController implements Initializable, Queryable {
                 : m.group("TITLE2") != null ? "sql-title"
                 : null;
 
-            //            assert styleClass != null;
             builder.add(Collections.emptyList(), m.start() - end);
             builder.add(Collections.singleton(styleClass), m.end() - m.start());
             end = m.end();

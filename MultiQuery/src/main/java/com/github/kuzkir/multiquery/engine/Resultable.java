@@ -5,7 +5,8 @@
  */
 package com.github.kuzkir.multiquery.engine;
 
-import java.sql.ResultSet;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -13,7 +14,7 @@ import java.sql.ResultSet;
  */
 public interface Resultable {
     
-    void setResult(String base, ResultSet resultSet);
+    void setResult(List<Map<String,Object>> result);
     void clear();
     void setStatus(String status);
 }
