@@ -112,7 +112,7 @@ public class DatabaseGroupEditController implements Initializable {
     }
 
     private boolean verify() {
-        int LENGTH = 20;
+        int LENGTH = 40;
         
         String txt = tfTitle.getText().trim();
 

@@ -17,6 +17,7 @@ import java.net.URL;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,6 +26,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import org.fxmisc.flowless.VirtualizedScrollPane;
@@ -57,7 +59,7 @@ public class QueryEditorController implements Initializable, Queryable {
     };
 
     private static final String[] FUNCTION = new String[]{
-        "min", "max", "avg", "ascii", "row_number", "rank", "dense_rank", "getdate", "cast"
+        "min", "max", "avg", "ascii", "row_number", "rank", "dense_rank", "getdate", "cast", "count"
     };
 
     private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
@@ -105,6 +107,21 @@ public class QueryEditorController implements Initializable, Queryable {
                 }
             }
         });
+
+        codeArea.onDragOverProperty().set(event -> {
+            if (event.getDragboard().hasFiles()) {
+                event.acceptTransferModes(TransferMode.ANY);
+            }
+        });
+
+        codeArea.onDragDroppedProperty().set(event -> {
+            List<File> files = event.getDragboard().getFiles();
+            if (files.isEmpty()) {
+                return;
+            }
+            File f = files.get(0);
+            openFile(f);
+        });
     }
 
     @FXML
@@ -126,23 +143,7 @@ public class QueryEditorController implements Initializable, Queryable {
         if (f == null) {
             return;
         }
-        
-        try (BufferedReader r = new BufferedReader(new FileReader(f))) {
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-            String ls = System.getProperty("line.separator");
-
-            while ((line = r.readLine()) != null) {
-                sb.append(line);
-                sb.append(ls);
-            }
-            sb.deleteCharAt(sb.length() - 1);
-            
-            codeArea.replaceText(sb.toString());
-            file = f;
-        } catch (Exception e) {
-            MessageBox.showException("Открытие файла", e);
-        }
+        openFile(f);
     }
 
     @FXML
@@ -155,12 +156,7 @@ public class QueryEditorController implements Initializable, Queryable {
         if (f == null) {
             return;
         }
-        try (FileWriter fw = new FileWriter(f);) {
-            fw.write(codeArea.getText());
-            file = f;
-        } catch (Exception e) {
-            MessageBox.showException("Сохранение файла", e);
-        }
+        saveFile(f);
     }
 
     @FXML
@@ -169,11 +165,7 @@ public class QueryEditorController implements Initializable, Queryable {
             btnSaveAs_onAction();
             return;
         }
-        try (FileWriter fw = new FileWriter(file)) {
-            fw.write(codeArea.getText());
-        } catch (Exception e) {
-            MessageBox.showException("Сохранение файла", e);
-        }
+        saveFile(file);
     }
 
     void setExecutable(Executable exe) {
@@ -182,7 +174,8 @@ public class QueryEditorController implements Initializable, Queryable {
 
     @Override
     public String getQuery() {
-        return codeArea.getText();
+        String selected = codeArea.getSelectedText();                
+        return selected.isEmpty() ? codeArea.getText() : selected;
     }
 
     private StyleSpans<Collection<String>> computeHighlighting() {
@@ -210,4 +203,32 @@ public class QueryEditorController implements Initializable, Queryable {
         return builder.create();
     }
 
+    private void saveFile(File file) {
+        try (FileWriter fw = new FileWriter(file);) {
+            fw.write(codeArea.getText());
+            this.file = file;
+        } catch (Exception e) {
+            MessageBox.showException("Сохранение файла", e);
+        }
+
+    }
+
+    private void openFile(File file) {
+        try (BufferedReader r = new BufferedReader(new FileReader(file))) {
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            String ls = System.getProperty("line.separator");
+
+            while ((line = r.readLine()) != null) {
+                sb.append(line);
+                sb.append(ls);
+            }
+            sb.deleteCharAt(sb.length() - 1);
+
+            codeArea.replaceText(sb.toString());
+            this.file = file;
+        } catch (Exception e) {
+            MessageBox.showException("Открытие файла", e);
+        }
+    }
 }

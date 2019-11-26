@@ -11,13 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.stream.Collectors;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -29,22 +35,35 @@ public class ResultSetController implements Initializable, Resultable {
 
     private final List<String> columnList;
     private final List<Map<String, Object>> data;
-    private final Object monitor = new Object();
+    private final String rcFormat;
+    private final String crFormat;
+    private FilterMode fmode;
 
     @FXML
-    private ScrollPane scrollPane;
-    @FXML
     private TextField tfFilter;
+    @FXML
+    private BorderPane borderPane;
     @FXML
     private TableView<Map<String, Object>> tableView;
     @FXML
     private VBox vbProgress;
     @FXML
     private Label lbStatus;
+    @FXML
+    private ImageView ivEditFilter;
+    @FXML
+    private Tooltip tEditFilter;
+    @FXML
+    private Label lbRowCount;
+    @FXML
+    private Label lbCurrentRow;
 
     public ResultSetController() {
         columnList = new ArrayList<>();
         data = new ArrayList<>();
+        rcFormat = "Число строк: %d / %d";
+        crFormat = "Текущая строка: %d";
+        fmode = FilterMode.CONTAINS;
     }
 
     /**
@@ -52,49 +71,134 @@ public class ResultSetController implements Initializable, Resultable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        ivEditFilter.setImage(new Image(getClass().getResourceAsStream("/Asterisk-16.png")));
+        tEditFilter.setText("Фильтрация данных по частичному совпадению");
     }
 
     @FXML
     private void tfFilter_onKeyReleased() {
-        String txt = tfFilter.getText().trim();
+        String txt = tfFilter.getText().toLowerCase().trim();
 
         tableView.getItems().clear();
         if (txt.isEmpty()) {
             tableView.getItems().addAll(data);
         } else {
-            tableView.getItems().addAll(data.parallelStream()
-                .filter(a -> a.values().parallelStream().anyMatch(b -> b.toString().contains(txt)))
-                .collect(Collectors.toList()));
+            switch (fmode) {
+                case CONTAINS:
+                    tableView.getItems().addAll(data.parallelStream()
+                        .filter(a -> a.values().parallelStream().anyMatch(b -> b != null && b.toString().toLowerCase().contains(txt)))
+                        .collect(Collectors.toList()));
+                    break;
+
+                case EQUALS:
+                    tableView.getItems().addAll(data.parallelStream()
+                        .filter(a -> a.values().parallelStream().anyMatch(b -> b != null && b.toString().toLowerCase().equals(txt)))
+                        .collect(Collectors.toList()));
+                    break;
+
+                case STRATS_WITH:
+                    tableView.getItems().addAll(data.parallelStream()
+                        .filter(a -> a.values().parallelStream().anyMatch(b -> b != null && b.toString().toLowerCase().startsWith(txt)))
+                        .collect(Collectors.toList()));
+                    break;
+            }
+        }
+
+        lbRowCount.setText(String.format(rcFormat, tableView.getItems().size(), data.size()));
+        tableView.sort();
+    }
+
+    @FXML
+    void btnClearFilter_onAction() {
+        tfFilter.setText("");
+        tfFilter_onKeyReleased();
+    }
+
+    @FXML
+    void btnEditFilter_onAction() {
+        switch (fmode) {
+            case CONTAINS:
+                ivEditFilter.setImage(new Image(getClass().getResourceAsStream("/Equal Sign-16.png")));
+                tEditFilter.setText("Фильтрация данных по полному совпадению");
+                fmode = FilterMode.EQUALS;
+                break;
+
+            case EQUALS:
+                ivEditFilter.setImage(new Image(getClass().getResourceAsStream("/More Than-16.png")));
+                tEditFilter.setText("Фильтрация данных по начальному совпадению");
+                fmode = FilterMode.STRATS_WITH;
+                break;
+
+            case STRATS_WITH:
+                ivEditFilter.setImage(new Image(getClass().getResourceAsStream("/Asterisk-16.png")));
+                tEditFilter.setText("Фильтрация данных по частичному совпадению");
+                fmode = FilterMode.CONTAINS;
+                break;
+        }
+        tfFilter_onKeyReleased();
+    }
+
+    @FXML
+    private void tableView_onMouseClicked() {
+        int cr = tableView.getSelectionModel().getSelectedIndex() + 1;
+        if (cr > 0) {
+            lbCurrentRow.setText(String.format(crFormat, cr));
+        } else {
+            lbCurrentRow.setText(null);
         }
     }
 
     @Override
-    public void setResult(List<Map<String,Object>> result) {
+    public void setResult(Set<String> columnName, List<Map<String, Object>> data) {
+        this.data.addAll(data);
+        this.columnList.addAll(columnName);
 
+        for (String cn : columnList) {
+            TableColumn<Map<String, Object>, Object> col = new TableColumn<>(cn);
+            col.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().get(cn)));
+
+            tableView.getColumns().add(col);
+        }
+
+        tableView.getItems().addAll(data);
+
+        lbRowCount.setText(String.format(rcFormat, tableView.getItems().size(), data.size()));
+
+        tableView.getSortOrder().add(tableView.getColumns().get(0));
         tableView.scrollTo(0);
         tableView.scrollToColumnIndex(0);
+
     }
 
     @Override
     public void clear() {
-        tableView.getColumns().clear();
-        tableView.getItems().clear();
-        columnList.clear();
-        data.clear();
+
+        if (!tableView.getColumns().isEmpty()) {
+            tableView.scrollTo(0);
+            tableView.scrollToColumnIndex(0);
+
+            tableView.getColumns().clear();
+            tableView.getItems().clear();
+            columnList.clear();
+            data.clear();
+
+        }
     }
 
     @Override
     public void setStatus(String status) {
         if (status == null) {
             vbProgress.setVisible(false);
-            scrollPane.setVisible(true);
-            tfFilter.setVisible(true);
+            borderPane.setVisible(true);
             return;
         }
-        scrollPane.setVisible(false);
-        tfFilter.setVisible(false);
-        vbProgress.setVisible(true);
         lbStatus.setText(status);
+
+        borderPane.setVisible(false);
+        vbProgress.setVisible(true);
+    }
+
+    private enum FilterMode {
+        CONTAINS, EQUALS, STRATS_WITH;
     }
 }

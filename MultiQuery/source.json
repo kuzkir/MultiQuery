@@ -10,8 +10,8 @@
           "host": "94.137.47.238",
           "port": 4850,
           "base": "TRN42",
-          "user": "trn-admin",
-          "password": "2578325783"
+          "user": "sa",
+          "password": "NTc4MzU3ODM\u003d"
         },
         {
           "isActive": true,
@@ -19,17 +19,8 @@
           "host": "94.137.47.238",
           "port": 4851,
           "base": "TRANSNAVI42",
-          "user": "trn-admin",
-          "password": "2578325783"
-        },
-        {
-          "isActive": true,
-          "title": "ГЭТ + Ком",
-          "host": "94.137.47.238",
-          "port": 4853,
-          "base": "TRN",
-          "user": "trn-admin",
-          "password": "2578325783"
+          "user": "sa",
+          "password": "MjZBNDh6"
         },
         {
           "isActive": true,
@@ -37,8 +28,245 @@
           "host": "94.137.47.238",
           "port": 4856,
           "base": "TRANSNAVI42",
-          "user": "trn-admin",
-          "password": "2578325783"
+          "user": "sa",
+          "password": "MjZBNDh6"
+        },
+        {
+          "isActive": true,
+          "title": "ГЭТ, комм",
+          "host": "94.137.47.238",
+          "port": 4853,
+          "base": "TRN",
+          "user": "sa",
+          "password": "MjZhNDh6"
+        }
+      ]
+    },
+    {
+      "title": "Мосгортранс",
+      "driver": "sqlserver",
+      "databases": [
+        {
+          "isActive": true,
+          "title": "Автобусный №01 (ЮЗФ)",
+          "host": "10.68.1.152",
+          "port": 1433,
+          "base": "TRANSNAVI001",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Автобусный №03 (СВФ)",
+          "host": "10.68.1.153",
+          "port": 1433,
+          "base": "TRANSNAVI003",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Автобусный №04 (ВФ)",
+          "host": "10.68.1.154",
+          "port": 1433,
+          "base": "TRANSNAVI004",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Автобусный №08 (ЦФ)",
+          "host": "10.68.1.155",
+          "port": 1433,
+          "base": "TRANSNAVI008",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Автобусный №11",
+          "host": "10.68.1.156",
+          "port": 1433,
+          "base": "TRANSNAVI011",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Автобусный №14",
+          "host": "10.68.1.157",
+          "port": 1433,
+          "base": "TRANSNAVI014",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Автобусный №15 (ЗФ)",
+          "host": "10.68.1.158",
+          "port": 1433,
+          "base": "TRANSNAVI015",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Автобусный №16 (ЮФ)",
+          "host": "10.68.1.159",
+          "port": 1433,
+          "base": "TRANSNAVI016",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Автобусный №17",
+          "host": "10.68.1.160",
+          "port": 1433,
+          "base": "TRANSNAVI017",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Автобусный №19 (ЗелФ)",
+          "host": "10.68.1.161",
+          "port": 1433,
+          "base": "TRANSNAVI019",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Электробусный №41 (ЦФ)",
+          "host": "10.68.0.68",
+          "port": 1433,
+          "base": "TRANSNAVI041",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Электробусный №43 (СВФ)",
+          "host": "10.68.1.151",
+          "port": 1433,
+          "base": "TRANSNAVI043",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Троллейбусный №03 (ЦФ)",
+          "host": "10.68.1.162",
+          "port": 1433,
+          "base": "TRANSNAVI103",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Троллейбусный №06 (СВФ)",
+          "host": "10.68.1.163",
+          "port": 1433,
+          "base": "TRANSNAVI106",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Троллейбусный №08",
+          "host": "10.68.1.164",
+          "port": 1433,
+          "base": "TRANSNAVI108",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Троллейбусный №09 (ВФ)",
+          "host": "10.68.1.165",
+          "port": 1433,
+          "base": "TRANSNAVI109",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Трамвайное депо",
+          "host": "10.68.1.166",
+          "port": 1433,
+          "base": "TRANSNAVI203",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        }
+      ]
+    },
+    {
+      "title": "Мосгортранс - Тест",
+      "driver": "sqlserver",
+      "databases": [
+        {
+          "isActive": true,
+          "title": "Тест 01",
+          "host": "10.68.1.167",
+          "port": 1433,
+          "base": "TRANSNAVI011_MTest",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Тест 02",
+          "host": "10.68.1.167",
+          "port": 1433,
+          "base": "TRANSNAVI011S",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Тест 03",
+          "host": "10.68.1.168",
+          "port": 1433,
+          "base": "TRANSNAVI004",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Тест 04",
+          "host": "10.68.1.168",
+          "port": 1433,
+          "base": "TRANSNAVI109",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Тест 05",
+          "host": "10.68.1.168",
+          "port": 1433,
+          "base": "TRANSNAVI109_MTest",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Тест 06",
+          "host": "10.68.1.169",
+          "port": 1433,
+          "base": "TRANSNAVI203",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
+        },
+        {
+          "isActive": true,
+          "title": "Тест 07",
+          "host": "10.68.1.169",
+          "port": 1433,
+          "base": "TRANSNAVI203S",
+          "user": "samokhinaa",
+          "password": "YWlGN2dvbzE\u003d"
         }
       ]
     }

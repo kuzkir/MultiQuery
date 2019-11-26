@@ -11,6 +11,7 @@ import com.github.kuzkir.multiquery.entity.Database;
 import com.github.kuzkir.multiquery.entity.DatabaseGroup;
 import com.github.kuzkir.multiquery.entity.DatabaseStatus;
 import com.github.kuzkir.multiquery.helper.ConnectionHelper;
+import com.github.kuzkir.multiquery.helper.EncodeHelper;
 import com.github.kuzkir.multiquery.helper.StringHelper;
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 import java.net.URL;
@@ -91,7 +92,7 @@ public class DatabaseEditController implements Initializable {
         tfHost.setText(base.getHost());
         sPort.getValueFactory().setValue(base.getPort());
         tfUser.setText(base.getUser());
-        pfPassword.setText(base.getPassword());
+        pfPassword.setText(EncodeHelper.decode(base.getPassword()));
         cbBase.getSelectionModel().select(base.getBase());
     }
 
@@ -138,7 +139,7 @@ public class DatabaseEditController implements Initializable {
                     .setPort(port)
                     .setBase(base)
                     .setUser(user)
-                    .setPassword(pswd);
+                    .setPassword(EncodeHelper.encode(pswd));
                 isSave = true;
                 stage.close();
             } catch (Exception e) {
@@ -149,14 +150,13 @@ public class DatabaseEditController implements Initializable {
     }
 
     private boolean verify() {
-        int LENGTH = 20;
+        int LENGTH = 40;
 
         String txt = tfTitle.getText().trim();
 
         boolean result = epTitle.verify(() -> (!txt.isEmpty()), "Заголовок не может быть пустым");
         result = result && epTitle.verify(() -> txt.length() < LENGTH, String.format("Длина заголовка не должна превышать %d символ%s", LENGTH, StringHelper.endAfterInt(LENGTH)));
-        result = epTitle.verify(() -> !group.getDatabases().stream().anyMatch(b -> b.getTitle().equals(txt)), "Подключение с таким навименованием уже имеется") && result;
-
+        
         result = epBase.verify(() -> tryConnect(), "Не удается подключиться к указанной базе данных") && result;
         return result;
     }

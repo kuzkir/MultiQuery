@@ -1,42 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane stylesheets="@../styles/common.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.kuzkir.multiquery.controller.ResultSetController">
-   <center>
-      <StackPane BorderPane.alignment="CENTER">
-         <children>
-            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" visible="false">
+<StackPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.kuzkir.multiquery.controller.ResultSetController">
+   <children>
+      <BorderPane fx:id="borderPane" stylesheets="@../styles/common.css" visible="false">
+         <center>
+            <ScrollPane fitToHeight="true" fitToWidth="true">
                <content>
-                  <TableView fx:id="tableView" focusTraversable="false">
+                  <TableView fx:id="tableView" onMouseClicked="#tableView_onMouseClicked">
                      <padding>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                      </padding>
                   </TableView>
                </content>
             </ScrollPane>
-            <VBox fx:id="vbProgress" alignment="CENTER" visible="false">
+         </center>
+         <top>
+            <HBox spacing="2.0" BorderPane.alignment="CENTER">
                <children>
-                  <ProgressIndicator />
-                  <Label fx:id="lbStatus" />
+                  <Button mnemonicParsing="false" onAction="#btnEditFilter_onAction">
+                     <graphic>
+                        <ImageView fx:id="ivEditFilter" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
+                     </graphic>
+                     <tooltip>
+                        <Tooltip fx:id="tEditFilter" />
+                     </tooltip>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#btnClearFilter_onAction">
+                     <tooltip>
+                        <Tooltip text="Очистить фильтр" />
+                     </tooltip>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Clear%20Filters-16.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <TextField fx:id="tfFilter" onKeyReleased="#tfFilter_onKeyReleased" promptText="Фильтр" HBox.hgrow="ALWAYS" />
                </children>
-            </VBox>
+               <BorderPane.margin>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </BorderPane.margin>
+            </HBox>
+         </top>
+         <bottom>
+            <HBox alignment="CENTER_RIGHT" spacing="15.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="lbCurrentRow" />
+                  <Label fx:id="lbRowCount" />
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </BorderPane.margin>
+            </HBox>
+         </bottom>
+      </BorderPane>
+      <VBox fx:id="vbProgress" alignment="CENTER" visible="false">
+         <children>
+            <ProgressIndicator />
+            <Label fx:id="lbStatus" />
          </children>
-      </StackPane>
-   </center>
-   <top>
-      <TextField fx:id="tfFilter" onKeyReleased="#tfFilter_onKeyReleased" promptText="Фильтр" visible="false" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-         </BorderPane.margin>
-      </TextField>
-   </top>
-</BorderPane>
+      </VBox>
+   </children>
+</StackPane>

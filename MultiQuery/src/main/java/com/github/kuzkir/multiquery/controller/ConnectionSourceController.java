@@ -79,7 +79,7 @@ public class ConnectionSourceController implements Initializable, Connectable {
                 if(!tr.isEmpty()) {
                     Database db = tr.getItem();
                     tfInfo.setText(infoMap.containsKey(db.getTitle())
-                    ? infoMap.get(db.getTitle())
+                        ? infoMap.get(db.getTitle())
                         : ConnectionHelper.getConnectionURL(getDriver(), db.getHost(), db.getPort(), db.getBase()));
                 }
             });
@@ -348,6 +348,7 @@ public class ConnectionSourceController implements Initializable, Connectable {
     @Override
     public List<Database> getDatabases() {
         try {
+            infoMap.clear();
             DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
             return group.getDatabases().stream()
                 .filter(a -> a.getIsActive())

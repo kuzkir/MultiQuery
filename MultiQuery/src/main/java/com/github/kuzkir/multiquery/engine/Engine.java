@@ -8,13 +8,17 @@ package com.github.kuzkir.multiquery.engine;
 import com.github.kuzkir.multiquery.entity.Database;
 import com.github.kuzkir.multiquery.entity.DatabaseStatus;
 import com.github.kuzkir.multiquery.helper.ConnectionHelper;
+import com.github.kuzkir.multiquery.helper.EncodeHelper;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -137,7 +141,7 @@ class Engine implements Executable {
             if (!connectionMap.containsKey(db.getTitle())) {
                 String url = ConnectionHelper.getConnectionURL(driver, db.getHost(), db.getPort(), db.getBase());
                 try {
-                    Connection con = DriverManager.getConnection(url, db.getUser(), db.getPassword());
+                    Connection con = DriverManager.getConnection(url, db.getUser(), EncodeHelper.decode(db.getPassword()));
                     connectionMap.put(db.getTitle(), con);
                     Platform.runLater(() -> {
                         connection.setStatus(db.getTitle(), DatabaseStatus.CONNECT);
@@ -191,6 +195,100 @@ class Engine implements Executable {
 
     private void formResult() {
 
+        threadWait();
+
+        Platform.runLater(() -> {
+            result.setStatus("Определение состава результатов");
+        });
+
+        String SYS = "*";
+        String BASE = "base" + SYS;
+
+        Map<String, Integer> col = new LinkedHashMap<>();
+        col.put(BASE, Types.NVARCHAR);
+
+        for (Map.Entry<String, ResultSet> e : resultMap.entrySet()) {
+            ResultSet rs = e.getValue();
+            try {
+                int c = rs.getMetaData().getColumnCount();
+                for (int i = 1; i <= c; i++) {
+                    String cn = rs.getMetaData().getColumnLabel(i);
+                    int ct = rs.getMetaData().getColumnType(i);
+                    if (cn.isEmpty()) {
+                        cn = String.format("%d%s", i, SYS);
+                    }
+                    if (col.containsKey(cn)) {
+                        if (col.get(cn).equals(ct)) {
+                        } else {
+                            rs.close();
+                            Platform.runLater(() -> {
+                                connection.setStatus(e.getKey(), DatabaseStatus.ERROR);
+                                connection.setInfo(e.getKey(), "Структура ответа отличается от базовой");
+                            });
+                        }
+                    } else {
+                        col.put(cn, ct);
+                    }
+                }
+            } catch (SQLException ex) {
+                connection.setStatus(e.getKey(), DatabaseStatus.ERROR);
+                connection.setInfo(e.getKey(), ex.getMessage());
+            }
+
+        }
+
+        Platform.runLater(() -> {
+            result.setStatus("Формирование результатов");
+        });
+
+        List<Map<String, Object>> data = new ArrayList<>();
+
+        for (Map.Entry<String, ResultSet> e : resultMap.entrySet()) {
+            Thread t = new Thread(() -> {
+                ResultSet rs = e.getValue();
+                String base = e.getKey();
+
+                try {
+                    if (rs.isClosed()) {
+                        connection.setStatus(e.getKey(), DatabaseStatus.ERROR);
+                        connection.setInfo(e.getKey(), "Соединение закрыто");
+                    } else {
+                        while (rs.next()) {
+                            Map<String, Object> map = new HashMap<>();
+                            for (Map.Entry<String, Integer> c : col.entrySet()) {
+                                String key = c.getKey();
+                                try {
+                                    String s = key.substring(0, key.length() - SYS.length());
+                                    Object o = ((key.endsWith(SYS) && !key.equals(BASE))
+                                        ? rs.getObject(Integer.parseInt(key.substring(0, key.length() - SYS.length())))
+                                        : rs.getObject(key));
+                                    map.put(key, o);
+                                } catch (Exception ex) {
+                                    map.put(key, null);
+                                }
+                            }
+                            map.put(BASE, base);
+                            synchronized (data) {
+                                data.add(map);
+                            }
+                        }
+                    }
+                } catch (Exception exc) {
+                }
+            });
+
+            threadMap.put(e.getKey(), t);
+            t.start();
+        }
+
+        threadWait();
+
+        Platform.runLater(() -> {
+            result.setResult(col.keySet(), data);
+        });
+    }
+
+    private boolean threadWait() {
         boolean done = false;
 
         while (!done) {
@@ -199,57 +297,7 @@ class Engine implements Executable {
                 done = !tm.getValue().isAlive() && done;
             }
         }
-        Platform.runLater(() -> {
-            result.setStatus("Формирование результатов");
-        });
-        
-        Concur
 
-        
-        
-//        try {
-//                String BASE_TITLE = "_base";
-//
-//                if (tableView.getColumns().isEmpty()) {
-//                    TableColumn<Map<String, Object>, Object> baseCol = new TableColumn(BASE_TITLE);
-//                    baseCol.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().get(BASE_TITLE)));
-//                    tableView.getColumns().add(baseCol);
-//                }
-//
-//                int cc = resultSet.getMetaData().getColumnCount();
-//                for (int i = 1; i <= cc; i++) {
-//                    String title = resultSet.getMetaData().getColumnName(i);
-//
-//                    if (!columnList.contains(title)) {
-//                        columnList.add(title);
-//
-//                        TableColumn<Map<String, Object>, Object> col = new TableColumn<>(title);
-//                        col.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().get(title)));
-//
-//                        tableView.getColumns().add(col);
-//                    }
-//                }
-//
-//                while (resultSet.next()) {
-//                    Map<String, Object> map = new HashMap<>();
-//                    map.put(BASE_TITLE, base);
-//                    for (String t : columnList) {
-//                        try {
-//                            map.put(t, resultSet.getObject(t));
-//                        } catch (Exception ex) {
-//                            map.put(t, null);
-//                        }
-//                    }
-//                    tableView.getItems().add(map);
-//                    data.add(map);
-//                }
-//
-//                tableView.scrollTo(0);
-//                tableView.scrollToColumnIndex(0);
-//            } catch (Exception e) {
-//            }
-//        }
-        
-
+        return done;
     }
 }
