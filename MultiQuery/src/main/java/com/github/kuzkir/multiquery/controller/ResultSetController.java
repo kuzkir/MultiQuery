@@ -5,6 +5,8 @@
  */
 package com.github.kuzkir.multiquery.controller;
 
+import com.github.kuzkir.fxcontrol.datetime.StopwatchVirtual;
+import com.github.kuzkir.multiquery.Main;
 import com.github.kuzkir.multiquery.engine.Resultable;
 import java.net.URL;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,7 +40,11 @@ public class ResultSetController implements Initializable, Resultable {
     private final List<Map<String, Object>> data;
     private final String rcFormat;
     private final String crFormat;
+    private final String ttFormat;
     private FilterMode fmode;
+    private StopwatchVirtual stopwatch;
+    private final StopwatchVirtual.FormatProperties properties;
+    private AnimationTimer timer;
 
     @FXML
     private TextField tfFilter;
@@ -57,13 +64,23 @@ public class ResultSetController implements Initializable, Resultable {
     private Label lbRowCount;
     @FXML
     private Label lbCurrentRow;
+    @FXML
+    private Label lbStopwatch;
+    @FXML
+    private Label lbTotalTime;
 
     public ResultSetController() {
         columnList = new ArrayList<>();
         data = new ArrayList<>();
         rcFormat = "Число строк: %d / %d";
         crFormat = "Текущая строка: %d";
+        ttFormat = "Общее время выполнения: %s";
         fmode = FilterMode.CONTAINS;
+        properties = new StopwatchVirtual.FormatProperties()
+            .setFixLength(true)
+            .setLeadPart(StopwatchVirtual.FormatProperties.LEAD_MINUTE)
+            .setSeparator(":")
+            .setShowNano(true);
     }
 
     /**
@@ -73,6 +90,13 @@ public class ResultSetController implements Initializable, Resultable {
     public void initialize(URL url, ResourceBundle rb) {
         ivEditFilter.setImage(new Image(getClass().getResourceAsStream("/Asterisk-16.png")));
         tEditFilter.setText("Фильтрация данных по частичному совпадению");
+
+        timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                lbStopwatch.setText(stopwatch.getFormated(Main.TITLE, properties));
+            }
+        };
     }
 
     @FXML
@@ -163,6 +187,7 @@ public class ResultSetController implements Initializable, Resultable {
         tableView.getItems().addAll(data);
 
         lbRowCount.setText(String.format(rcFormat, tableView.getItems().size(), data.size()));
+        lbTotalTime.setText(String.format(ttFormat, stopwatch.getFormated(Main.TITLE, properties)));
 
         tableView.getSortOrder().add(tableView.getColumns().get(0));
         tableView.scrollTo(0);
@@ -188,14 +213,20 @@ public class ResultSetController implements Initializable, Resultable {
     @Override
     public void setStatus(String status) {
         if (status == null) {
+            stopwatch.stop(Main.TITLE);
+            timer.stop();
             vbProgress.setVisible(false);
             borderPane.setVisible(true);
             return;
         }
         lbStatus.setText(status);
-
+        timer.start();
         borderPane.setVisible(false);
         vbProgress.setVisible(true);
+    }
+
+    void setStopwatch(StopwatchVirtual stopwatch) {
+        this.stopwatch = stopwatch;
     }
 
     private enum FilterMode {

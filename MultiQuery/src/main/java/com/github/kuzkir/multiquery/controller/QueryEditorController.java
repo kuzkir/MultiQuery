@@ -5,7 +5,8 @@
  */
 package com.github.kuzkir.multiquery.controller;
 
-import com.github.kuzkir.fxcontrol.MessageBox;
+import com.github.kuzkir.fxcontrol.datetime.StopwatchVirtual;
+import com.github.kuzkir.fxcontrol.message.MessageBox;
 import com.github.kuzkir.multiquery.Main;
 import com.github.kuzkir.multiquery.engine.Executable;
 import com.github.kuzkir.multiquery.engine.Queryable;
@@ -49,13 +50,16 @@ public class QueryEditorController implements Initializable, Queryable {
     private Executable exe;
     private File file;
 
+    private StopwatchVirtual stopwatch;
+
     private static final String[] KEYWORDS = new String[]{
         "select", "top", "with", "as", "from", "join", "inner", "full", "left", "right", "on",
         "where", "and", "not", "in", "like", "order", "by", "asc", "desc", "group", "having",
         "begin", "end", "case", "when", "then", "else", "if", "while", "create", "table", "declare",
         "int", "smallint", "bigint", "char", "varchar", "nchar", "nvarchar", "float", "real", "double",
         "bit", "bool", "over", "partition", "primary", "key", "insert", "into", "exec", "execute",
-        "identity", "update", "set", "values", "distinct", "drop", "alter", "delete", "union", "all"
+        "identity", "update", "set", "values", "distinct", "drop", "alter", "delete", "union", "all",
+        "or"
     };
 
     private static final String[] FUNCTION = new String[]{
@@ -126,6 +130,7 @@ public class QueryEditorController implements Initializable, Queryable {
 
     @FXML
     void btnExecute_onAction() {
+        stopwatch.start(Main.TITLE);
         try {
             exe.execute();
         } catch (Exception e) {
@@ -171,10 +176,14 @@ public class QueryEditorController implements Initializable, Queryable {
     void setExecutable(Executable exe) {
         this.exe = exe;
     }
+    
+    void setStopwatch(StopwatchVirtual stopwatch) {
+        this.stopwatch = stopwatch;
+    }
 
     @Override
     public String getQuery() {
-        String selected = codeArea.getSelectedText();                
+        String selected = codeArea.getSelectedText();
         return selected.isEmpty() ? codeArea.getText() : selected;
     }
 

@@ -64,6 +64,7 @@
                <children>
                   <Label fx:id="lbCurrentRow" />
                   <Label fx:id="lbRowCount" />
+                  <Label fx:id="lbTotalTime" />
                </children>
                <BorderPane.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -75,6 +76,7 @@
          <children>
             <ProgressIndicator />
             <Label fx:id="lbStatus" />
+            <Label fx:id="lbStopwatch" />
          </children>
       </VBox>
    </children>

@@ -5,7 +5,8 @@
  */
 package com.github.kuzkir.multiquery.controller;
 
-import com.github.kuzkir.fxcontrol.MessageBox;
+import com.github.kuzkir.fxcontrol.datetime.StopwatchVirtual;
+import com.github.kuzkir.fxcontrol.message.MessageBox;
 import com.github.kuzkir.multiquery.Main;
 import com.github.kuzkir.multiquery.entity.Database;
 import com.github.kuzkir.multiquery.entity.DatabaseGroup;
@@ -47,6 +48,9 @@ public class ConnectionSourceController implements Initializable, Connectable {
 
     private final ConnectionSource source;
     private final Map<String,String> infoMap;
+    
+    private StopwatchVirtual stopwatch;
+    private final StopwatchVirtual.FormatProperties properties;
 
     @FXML
     private ComboBox<String> cbConnectionGroup;
@@ -64,6 +68,11 @@ public class ConnectionSourceController implements Initializable, Connectable {
     public ConnectionSourceController() {
         source = new ConnectionSourceMaintenance();
         infoMap = new HashMap<>();
+        properties = new StopwatchVirtual.FormatProperties()
+            .setFixLength(true)
+            .setLeadPart(StopwatchVirtual.FormatProperties.LEAD_MINUTE)
+            .setSeparator(":")
+            .setShowNano(true);
     }
 
     /**
@@ -268,6 +277,10 @@ public class ConnectionSourceController implements Initializable, Connectable {
         }
         updateBase();
     }
+    
+    void setStopwatch(StopwatchVirtual stopwatch) {
+        this.stopwatch = stopwatch;
+    }
 
     private DatabaseGroup databaseGroupEditForm(DatabaseGroup group) throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -370,6 +383,16 @@ public class ConnectionSourceController implements Initializable, Connectable {
 
     @Override
     public void setStatus(String base, DatabaseStatus status) {
+        
+        if(status.equals(DatabaseStatus.LOAD)){
+            stopwatch.start(base);
+        } else if(status.equals(DatabaseStatus.COMPLETE)) {
+            stopwatch.stop(base);
+            setInfo(base, "Время выполнения: " + stopwatch.getFormated(base, properties));
+        } else {
+            stopwatch.remove(base);
+        }
+        
         try {
             DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
             group.getDatabases().stream()

@@ -5,7 +5,7 @@
  */
 package com.github.kuzkir.multiquery;
 
-import com.github.kuzkir.fxcontrol.MessageBox;
+import com.github.kuzkir.fxcontrol.message.MessageBox;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -19,10 +19,11 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     private static Stage primaryStage;
+    public static final String TITLE = "MultiQuery";
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("MultiQuery");
+        primaryStage.setTitle(TITLE);
         primaryStage.setMaximized(true);
 
         this.primaryStage = primaryStage;

@@ -171,6 +171,7 @@ class Engine implements Executable {
             Thread th = new Thread(() -> {
                 try {
                     Statement st = con.getValue().createStatement();
+                    st.setQueryTimeout(Integer.MAX_VALUE);
                     resultMap.put(con.getKey(), st.executeQuery(query.getQuery()));
                     Platform.runLater(() -> {
                         connection.setStatus(con.getKey(), DatabaseStatus.COMPLETE);

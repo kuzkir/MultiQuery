@@ -5,7 +5,8 @@
  */
 package com.github.kuzkir.multiquery.controller;
 
-import com.github.kuzkir.fxcontrol.MessageBox;
+import com.github.kuzkir.fxcontrol.datetime.StopwatchVirtual;
+import com.github.kuzkir.fxcontrol.message.MessageBox;
 import com.github.kuzkir.multiquery.Main;
 import com.github.kuzkir.multiquery.engine.Executable;
 import com.github.kuzkir.multiquery.engine.ExecutableFactory;
@@ -28,6 +29,7 @@ import javafx.scene.layout.AnchorPane;
 public class MainPanelController implements Initializable {
 
     private Executable exe;
+    private StopwatchVirtual stopwatch;
 
     @FXML
     private AnchorPane sourcePane;
@@ -73,12 +75,16 @@ public class MainPanelController implements Initializable {
             QueryEditorController qe = (QueryEditorController) queryLoader.getController();
             ResultSetController rs = (ResultSetController) resultLoader.getController();
 
+            stopwatch = new StopwatchVirtual();
+            qe.setStopwatch(stopwatch);
+            cs.setStopwatch(stopwatch);
+            rs.setStopwatch(stopwatch);
+            
             exe = ExecutableFactory.getInstance()
                 .setConnection(cs)
                 .setQuery(qe)
                 .setResulte(rs)
                 .build();
-            
             qe.setExecutable(exe);
 
             Main.getPrimaryStage().addEventHandler(KeyEvent.KEY_PRESSED, key -> {
@@ -119,10 +125,10 @@ public class MainPanelController implements Initializable {
 
         } catch (IOException e) {
             MessageBox.showException("Загрузка главной формы", e);
-            Main.getPrimaryStage().close();
+            return;
         } catch (Exception e) {
             MessageBox.showException("Загрузка движка", e);
-            Main.getPrimaryStage().close();
+            return;
         }
     }
 

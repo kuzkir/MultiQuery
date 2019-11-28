@@ -5,8 +5,8 @@
  */
 package com.github.kuzkir.multiquery.controller;
 
-import com.github.kuzkir.fxcontrol.ErrorProvider;
-import com.github.kuzkir.fxcontrol.MessageBox;
+import com.github.kuzkir.fxcontrol.message.ErrorProvider;
+import com.github.kuzkir.fxcontrol.message.MessageBox;
 import com.github.kuzkir.multiquery.entity.Database;
 import com.github.kuzkir.multiquery.entity.DatabaseGroup;
 import com.github.kuzkir.multiquery.entity.DatabaseStatus;
