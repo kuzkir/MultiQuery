@@ -14,6 +14,7 @@ import javafx.scene.input.KeyEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -74,11 +75,6 @@ public class MainPanelController implements Initializable {
             ConnectionSourceController cs = (ConnectionSourceController) sourceLoader.getController();
             QueryEditorController qe = (QueryEditorController) queryLoader.getController();
             ResultSetController rs = (ResultSetController) resultLoader.getController();
-
-            stopwatch = new StopwatchVirtual();
-            qe.setStopwatch(stopwatch);
-            cs.setStopwatch(stopwatch);
-            rs.setStopwatch(stopwatch);
             
             exe = ExecutableFactory.getInstance()
                 .setConnection(cs)
@@ -125,10 +121,10 @@ public class MainPanelController implements Initializable {
 
         } catch (IOException e) {
             MessageBox.showException("Загрузка главной формы", e);
-            return;
+            Platform.exit();
         } catch (Exception e) {
             MessageBox.showException("Загрузка движка", e);
-            return;
+            Platform.exit();
         }
     }
 

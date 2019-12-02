@@ -11,5 +11,6 @@ package com.github.kuzkir.multiquery.engine;
  */
 public interface Executable extends AutoCloseable {
     
-    void execute() throws Exception;
+    void execute();
+    void stop();
 }

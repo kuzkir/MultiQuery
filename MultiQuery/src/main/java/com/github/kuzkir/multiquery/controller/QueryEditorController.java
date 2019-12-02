@@ -5,7 +5,6 @@
  */
 package com.github.kuzkir.multiquery.controller;
 
-import com.github.kuzkir.fxcontrol.datetime.StopwatchVirtual;
 import com.github.kuzkir.fxcontrol.message.MessageBox;
 import com.github.kuzkir.multiquery.Main;
 import com.github.kuzkir.multiquery.engine.Executable;
@@ -49,8 +48,6 @@ public class QueryEditorController implements Initializable, Queryable {
     private CodeArea codeArea;
     private Executable exe;
     private File file;
-
-    private StopwatchVirtual stopwatch;
 
     private static final String[] KEYWORDS = new String[]{
         "select", "top", "with", "as", "from", "join", "inner", "full", "left", "right", "on",
@@ -130,7 +127,6 @@ public class QueryEditorController implements Initializable, Queryable {
 
     @FXML
     void btnExecute_onAction() {
-        stopwatch.start(Main.TITLE);
         try {
             exe.execute();
         } catch (Exception e) {
@@ -176,10 +172,6 @@ public class QueryEditorController implements Initializable, Queryable {
     void setExecutable(Executable exe) {
         this.exe = exe;
     }
-    
-    void setStopwatch(StopwatchVirtual stopwatch) {
-        this.stopwatch = stopwatch;
-    }
 
     @Override
     public String getQuery() {
@@ -219,7 +211,6 @@ public class QueryEditorController implements Initializable, Queryable {
         } catch (Exception e) {
             MessageBox.showException("Сохранение файла", e);
         }
-
     }
 
     private void openFile(File file) {

@@ -58,7 +58,7 @@ class Engine implements Executable {
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() {
 
         currentThread = new Thread(() -> {
             try {
@@ -88,6 +88,13 @@ class Engine implements Executable {
         });
 
         currentThread.start();
+    }
+    
+    @Override
+    public void stop() {
+        if(currentThread.isAlive()) {
+            
+        }
     }
 
     private void startExecute() {

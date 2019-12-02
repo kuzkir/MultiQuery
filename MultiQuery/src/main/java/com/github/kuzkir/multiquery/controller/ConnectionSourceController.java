@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,7 +31,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -47,9 +47,9 @@ import javafx.stage.Stage;
 public class ConnectionSourceController implements Initializable, Connectable {
 
     private final ConnectionSource source;
-    private final Map<String,String> infoMap;
-    
-    private StopwatchVirtual stopwatch;
+    private final Map<String, String> infoMap;
+
+    private final StopwatchVirtual stopwatch;
     private final StopwatchVirtual.FormatProperties properties;
 
     @FXML
@@ -68,9 +68,10 @@ public class ConnectionSourceController implements Initializable, Connectable {
     public ConnectionSourceController() {
         source = new ConnectionSourceMaintenance();
         infoMap = new HashMap<>();
+        stopwatch = new StopwatchVirtual();
         properties = new StopwatchVirtual.FormatProperties()
-            .setFixLength(true)
-            .setLeadPart(StopwatchVirtual.FormatProperties.LEAD_MINUTE)
+            .setLeadZero(true)
+            .setLeadPart(StopwatchVirtual.LeadPart.MINUTE)
             .setSeparator(":")
             .setShowNano(true);
     }
@@ -81,20 +82,6 @@ public class ConnectionSourceController implements Initializable, Connectable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         updateGroup(null);
-        
-        tbDatabase.setRowFactory(tv -> {
-            TableRow<Database> tr = new TableRow<>();
-            tr.setOnMouseClicked(e -> {
-                if(!tr.isEmpty()) {
-                    Database db = tr.getItem();
-                    tfInfo.setText(infoMap.containsKey(db.getTitle())
-                        ? infoMap.get(db.getTitle())
-                        : ConnectionHelper.getConnectionURL(getDriver(), db.getHost(), db.getPort(), db.getBase()));
-                }
-            });
-            
-            return tr;
-        });
 
         tcActive.setCellValueFactory(cvf -> {
             Database db = cvf.getValue();
@@ -238,7 +225,7 @@ public class ConnectionSourceController implements Initializable, Connectable {
             MessageBox.showException("Изменение подключения", e);
         }
     }
-    
+
     @FXML
     void btnInvert_onAction() {
         try {
@@ -276,10 +263,6 @@ public class ConnectionSourceController implements Initializable, Connectable {
             MessageBox.showException("Обновление списка групп", e);
         }
         updateBase();
-    }
-    
-    void setStopwatch(StopwatchVirtual stopwatch) {
-        this.stopwatch = stopwatch;
     }
 
     private DatabaseGroup databaseGroupEditForm(DatabaseGroup group) throws IOException {
@@ -351,7 +334,20 @@ public class ConnectionSourceController implements Initializable, Connectable {
             DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
             if (group != null) {
                 tbDatabase.getItems().clear();
+                tfInfo.setText("");
+                
                 tbDatabase.getItems().addAll(group.getDatabases());
+                tbDatabase.getSelectionModel().getSelectedItems().addListener(new ListChangeListener<Database>() {
+                    @Override
+                    public void onChanged(ListChangeListener.Change<? extends Database> c) {
+                        Database db = tbDatabase.getSelectionModel().getSelectedItem();
+                        if (db != null) {
+                            tfInfo.setText(infoMap.containsKey(db.getTitle())
+                                ? infoMap.get(db.getTitle())
+                                : ConnectionHelper.getConnectionURL(getDriver(), db.getHost(), db.getPort(), db.getBase()));
+                        }
+                    }
+                });
             }
         } catch (Exception e) {
             MessageBox.showException("Обновление списка подключений", e);
@@ -383,16 +379,16 @@ public class ConnectionSourceController implements Initializable, Connectable {
 
     @Override
     public void setStatus(String base, DatabaseStatus status) {
-        
-        if(status.equals(DatabaseStatus.LOAD)){
+
+        if (status.equals(DatabaseStatus.LOAD)) {
             stopwatch.start(base);
-        } else if(status.equals(DatabaseStatus.COMPLETE)) {
+        } else if (status.equals(DatabaseStatus.COMPLETE)) {
             stopwatch.stop(base);
             setInfo(base, "Время выполнения: " + stopwatch.getFormated(base, properties));
         } else {
             stopwatch.remove(base);
         }
-        
+
         try {
             DatabaseGroup group = source.getGroupByTitle(cbConnectionGroup.getValue());
             group.getDatabases().stream()
